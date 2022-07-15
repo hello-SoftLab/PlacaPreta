@@ -55,11 +55,7 @@ export const CarCreation = ({navigation}) => {
         });
     },[searchText]);
 
-    useEffect(() => {
-        if(selected != ''){
-            selectButtonOpacity.value = withTiming(1,{duration:1000});
-        }
-    },[selected]);
+    
     
     return <View style={styles.container}>
             <View style={[styles.carCreationContainer,{justifyContent:'flex-start'}]}>

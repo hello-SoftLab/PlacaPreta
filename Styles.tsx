@@ -2,6 +2,10 @@ import { createContext } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 
 
+export const Window = {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height
+};
 
 export const styles = StyleSheet.create({
     container:{
@@ -25,14 +29,10 @@ export const styles = StyleSheet.create({
         borderRadius:10
     },
     profileContainer: {
-
+        width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:'rgb(255,197,48)'
     }
 });
 
-export const Window = {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height
-};
 
 
 export const GarageContext = createContext({carousel: null,carsData: null,setCarsData: null});

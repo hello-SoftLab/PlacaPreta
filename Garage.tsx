@@ -27,7 +27,7 @@ export const Garage = () => {
             if( e.translationY < 0){
                 profileLogo.value = withTiming(1,{duration:1500});
                 profilePictureOpacity.value = withTiming(1,{duration:1300});
-                profilePosition.value = withTiming(Window.height/9,{duration:1000});
+                profilePosition.value = withTiming(Window.height/20,{duration:1000});
             }
             else {
                 profileLogo.value = withTiming(0,{duration:600});
@@ -71,15 +71,16 @@ export const Garage = () => {
 
     
     return <><Animated.View style={styles.container}>
-        <Carousel style={CarouselOpacityStyle} ref={(carousel) => data.carousel = carousel} loop={false} mode="parallax" modeConfig={{parallaxScrollingScale:0.7,parallaxScrollingOffset:42}}
+        <Animated.View style={CarouselOpacityStyle}>
+        <Carousel ref={(carousel) => data.carousel = carousel} loop={false} mode="parallax" modeConfig={{parallaxScrollingScale:0.7,parallaxScrollingOffset:42}}
         width={Window.width}
         height={Window.height/1.2}
         data={myData}
         renderItem={({item,index,animationValue})=><Card updateData={setMyData} item={item} animationValue={animationValue} reference={data.carousel} index={index}></Card>}></Carousel>
-        
+        </Animated.View>
         {/* Profile View! */}
         <GestureDetector gesture={gesture}>
-            <Animated.View entering={SlideInDown} style={[styles.cardContainer,{width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:'yellow'},ProfileViewStyle]}>
+            <Animated.View entering={SlideInDown} style={[styles.profileContainer,ProfileViewStyle]}>
                 <Animated.View style={[ProfilePictureStyle,{alignSelf:'center',borderWidth:1,borderRadius:250,marginTop:'15%',width:'95%',flex:0.38}]}>
 
                 </Animated.View>
