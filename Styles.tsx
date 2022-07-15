@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
         borderRadius:10
     },
     profileContainer: {
-        width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:'rgb(255,197,48)'
+        borderRadius:10,width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:'rgb(255,197,48)'
     }
 });
 
