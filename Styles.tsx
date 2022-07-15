@@ -7,6 +7,12 @@ export const Window = {
     height: Dimensions.get("window").height
 };
 
+export const AppColors = {
+    yellow: 'rgb(255,197,48)',
+    black : 'rgb(0,0,0)',
+    white:'rgb(255,255,255)'
+}
+
 export const styles = StyleSheet.create({
     container:{
         backgroundColor:'black',
@@ -29,7 +35,7 @@ export const styles = StyleSheet.create({
         borderRadius:10
     },
     profileContainer: {
-        borderRadius:10,width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:'rgb(255,197,48)'
+        borderRadius:10,width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:AppColors.yellow
     }
 });
 

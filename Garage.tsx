@@ -6,7 +6,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { DBContext } from "./Backend";
 import Animated, { useSharedValue, withTiming,SlideInDown, useAnimatedStyle, modulo, interpolate } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { withSpring } from "react-native-reanimated/lib/types/lib/reanimated2/animation";
 
 
 
