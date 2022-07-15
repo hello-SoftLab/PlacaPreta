@@ -23,11 +23,15 @@ const CarPropertiesFunc = ({item,selected,setSelected}) => {
         }
     });
 
-    return <Animated.View style={[{borderWidth:1,padding:10},styleSelf]}>
-            <Pressable style={{flex:1,width:'100%'}} onPress={()=>setSelected(item.name)}>
-            <Text style={{marginLeft:10}}>{item.name}</Text>
-            </Pressable>
-        </Animated.View>
+    const onPress = () => {
+        setSelected(item.name);
+    }
+
+    return <Pressable style={{flex:1,width:'100%',backgroundColor:'yellow'}} onPress={onPress}> 
+            <Animated.View style={[{borderWidth:1,padding:10},styleSelf]}>
+                <Text style={{marginLeft:10}}>{item.name}</Text>
+            </Animated.View>
+        </Pressable>
     
 
 }
@@ -55,7 +59,9 @@ export const CarCreation = ({navigation}) => {
         });
     },[searchText]);
 
-    
+    const renderItem = ({item}) => { 
+        return <CarProperties selected={selected} setSelected={setSelected} item={item}></CarProperties>
+    }
     
     return <View style={styles.container}>
             <View style={[styles.carCreationContainer,{justifyContent:'flex-start'}]}>
@@ -63,7 +69,7 @@ export const CarCreation = ({navigation}) => {
                     <SearchBar value={searchText} placeholder={"Search for model, brand..."} onChangeText={(text) => { setSearchText(text)}} containerStyle={{backgroundColor:'black',borderBottomWidth:0}}>
                     </SearchBar>
                 </View>
-                <FlatList pointerEvents="box-none" style={{width:'100%'}} data={data} renderItem={({item}) => { return <CarProperties selected={selected} setSelected={setSelected} item={item}></CarProperties>}}></FlatList>
+                <FlatList windowSize={10} pointerEvents="box-none" style={{width:'100%'}} data={data} renderItem={renderItem}></FlatList>
                 <Animated.View style={{justifyContent:'center',alignItems:'center',borderRadius:50,position:'absolute',width:Window.width/4,height:Window.height/20,backgroundColor:'yellow',bottom:Window.height/15,opacity:selectButtonOpacity.value}}>
                     <Text>Select</Text>
                 </Animated.View>
