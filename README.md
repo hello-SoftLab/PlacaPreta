@@ -7,7 +7,7 @@ Resumo do projeto
 
 ## EQUIPE
 Resumo da equipe
-| Integrante | Função no Projeto |
+| Integrante | Área de atuação no projeto |
 | --------- | --------- |
 | [Otavio Maya](https://github.com/knz13)| Porgramação Front-End e desenvolvimento mobile com Typescript |
 | [Lucas Alves Vilela](https://github.com/Lucas-AV) | Back-End e coleta de dados com Python |
