@@ -12,12 +12,30 @@ export const InitDBContext = () => {
     
 
     const statements = [
-        `DROP TABLE cars`,
         `CREATE TABLE IF NOT EXISTS cars (
             id int,
-            name text
+            placa text,
+            name text,
+            color text,
+            year int,
+            doors int,
+            model text,
+            years_of_production text,
+            image_url text,
+            transmission text,
+            seats int,
+            wheel text,
+            motor text,
+            max_speed text,
+            acceleration text,
+            fuel text,
+            torque text,
+            base_power text,
+            max_power text
         )`
     ]
+
+    
 
     console.log("initializing db!");
 

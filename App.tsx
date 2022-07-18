@@ -4,11 +4,13 @@ import { } from 'react-native-navigation';
 import { NavigationContainer,NavigationProp, Route } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Garage } from './Garage';
-import { GarageContext } from './Styles';
+import { AnimationsContext, GarageContext } from './Styles';
 import { DBContext, InitAllCarsDB, InitDBContext } from './Backend';
 import { CarCreation } from './CarCreation';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
+import { TechnicalDetails } from './TechnicalDetails';
+import { SharedValue } from 'react-native-reanimated';
 
 
 const Stack = createNativeStackNavigator();
@@ -36,15 +38,18 @@ export default function App() {
 
   // Criando as páginas e os contextos necessários (variáveis globais)
   return (
+    <AnimationsContext.Provider value={{detailsAnimationProgress:null,detailsAnimationGeneralOpacity:null,garageBottomCardPosition:null}}>
     <DBContext.Provider value={{garageDB:InitDBContext(),allCarsDB:InitAllCarsDB()}}>
-    <GarageContext.Provider value={{carousel:null,carsData:[],setCarsData:(arr) => {}}}>
+    <GarageContext.Provider value={{selectedCarProperties:null,carousel:null,carsData:[],setCarsData:(arr) => {},shouldRenderStateFunc:(randomData) => {}}}>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Garage" component={Garage} options={{headerShown:false}}></Stack.Screen>
         <Stack.Screen name="CarCreation" component={CarCreation} options={{headerShown:false,animation:'fade_from_bottom'}}></Stack.Screen>
+        <Stack.Screen name="TechnicalDetails" component={TechnicalDetails} options={{headerShown:false,animation:'none'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
     </GarageContext.Provider>
     </DBContext.Provider>
+    </AnimationsContext.Provider>
   );
 };

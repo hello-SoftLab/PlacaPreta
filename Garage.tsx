@@ -1,5 +1,5 @@
 import { View,Text, Pressable } from "react-native"
-import { GarageContext, styles, Window } from "./Styles"
+import { AnimationsContext, GarageContext, styles, Window } from "./Styles"
 import Carousel from 'react-native-reanimated-carousel';
 import Card from "./Card";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -14,11 +14,15 @@ export const Garage = () => {
 
     const data = useContext(GarageContext);
     const db = useContext(DBContext).garageDB;
+    const animationsData = useContext(AnimationsContext);
+    animationsData.detailsAnimationProgress = useSharedValue(false);
+    const [reRenderDummy,setReRenderDummy] = useState(0);
+    data.shouldRenderStateFunc = setReRenderDummy;
     const [myData,setMyData] = useState([]);
     const shouldShowProfile = useSharedValue(false);
     const profilePictureOpacity = useSharedValue(0);
     const profileLogo = useSharedValue(0);
-    const profilePosition = useSharedValue(-Window.height/1.35);
+    animationsData.garageBottomCardPosition = useSharedValue(-Window.height/1.35);
 
     //movimento do card de profile
     const gesture = Gesture.Pan()
@@ -26,12 +30,12 @@ export const Garage = () => {
             if( e.translationY < 0){
                 profileLogo.value = withTiming(1,{duration:1500});
                 profilePictureOpacity.value = withTiming(1,{duration:1300});
-                profilePosition.value = withTiming(Window.height/20,{duration:1000});
+                animationsData.garageBottomCardPosition.value = withTiming(Window.height/20,{duration:1000});
             }
             else {
                 profileLogo.value = withTiming(0,{duration:600});
                 profilePictureOpacity.value = withTiming(0,{duration:800});
-                profilePosition.value = withTiming(-Window.height/1.35,{duration:1000})
+                animationsData.garageBottomCardPosition.value = withTiming(-Window.height/1.35,{duration:1000})
             }
         });
 
@@ -43,12 +47,12 @@ export const Garage = () => {
                 setMyData([...result.rows._array,{id:-1}]);
             })
         });
-    },[])
+    },[reRenderDummy])
 
     //styles do card de profile
     const ProfileViewStyle = useAnimatedStyle(() => {
         return {
-            bottom:profilePosition.value
+            bottom:animationsData.garageBottomCardPosition.value
         };
     });
     const ProfilePictureStyle = useAnimatedStyle(() => {
@@ -71,11 +75,11 @@ export const Garage = () => {
     
     return <><Animated.View style={styles.container}>
         <Animated.View style={CarouselOpacityStyle}>
-        <Carousel ref={(carousel) => data.carousel = carousel} loop={false} mode="parallax" modeConfig={{parallaxScrollingScale:0.7,parallaxScrollingOffset:42}}
+        <Carousel ref={(carousel) => data.carousel = carousel} loop={false} mode="parallax" modeConfig={{parallaxScrollingScale:0.7,parallaxScrollingOffset:200,parallaxAdjacentItemScale:0.6}}
         width={Window.width}
-        height={Window.height/1.2}
+        height={Window.height/1.05}
         data={myData}
-        renderItem={({item,index,animationValue})=><Card updateData={setMyData} item={item} animationValue={animationValue} reference={data.carousel} index={index}></Card>}></Carousel>
+        renderItem={({item,index,animationValue})=><Card item={item} animationValue={animationValue} index={index}></Card>}></Carousel>
         </Animated.View>
         {/* Profile View! */}
         <GestureDetector gesture={gesture}>

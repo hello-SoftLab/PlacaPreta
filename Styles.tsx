@@ -1,5 +1,8 @@
+import { Database } from "expo-sqlite";
 import { createContext } from "react";
 import { Dimensions, StyleSheet } from "react-native";
+import { SharedValue, useSharedValue } from "react-native-reanimated";
+import { ICarouselInstance } from "react-native-reanimated-carousel";
 
 
 export const Window = {
@@ -12,6 +15,11 @@ export const AppColors = {
     black : 'rgb(0,0,0)',
     white:'rgb(255,255,255)'
 }
+
+export const AppConstants = {
+    yearSize:22,
+    nameSize:32,
+};
 
 export const styles = StyleSheet.create({
     container:{
@@ -39,6 +47,13 @@ export const styles = StyleSheet.create({
     }
 });
 
+export const triggerGarageReRender = (garageData) => {
+    garageData.shouldRenderStateFunc(Math.random() * 100000);
+}
 
 
-export const GarageContext = createContext({carousel: null,carsData: null,setCarsData: null});
+
+export const AnimationsContext = createContext({detailsAnimationProgress: null as SharedValue<boolean>,detailsAnimationGeneralOpacity:null as SharedValue<number>,garageBottomCardPosition: null as SharedValue<number>})
+
+export const GarageContext = createContext({selectedCarProperties: null ,shouldRenderStateFunc:null,carousel: null as ICarouselInstance,carsData: null,setCarsData: null});
+
