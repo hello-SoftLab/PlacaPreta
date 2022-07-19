@@ -19,10 +19,7 @@ export default function Card({item,index,animationValue}) {
 
     const style = useAnimatedStyle(() => {
         //testing if in detailsAnimation
-        const opacity = animationsContext.detailsAnimationProgress.value == false?
-        interpolate(animationValue.value,[-1,0,1],[generalAlpha.value,1,generalAlpha.value],Extrapolate.CLAMP)
-        :
-        1
+        const opacity =interpolate(animationValue.value,[-1,0,1],[generalAlpha.value,1,generalAlpha.value],Extrapolate.CLAMP)
         return {opacity}
     },[animationValue]);
 
@@ -32,32 +29,44 @@ export default function Card({item,index,animationValue}) {
 
     //Card para adicionar carro
     if(item.id == -1){
-        return <Animated.View style={[styles.cardContainer,{width:'100%',backgroundColor:'white',flex:1,justifyContent:'center',alignSelf:'center',alignItems:'center'},style]}>
+        return <Animated.View style={[styles.cardContainer,style,{width:'100%',backgroundColor:'white',flex:1,justifyContent:'center',alignSelf:'center',alignItems:'center'}]}>
                 <TouchableWithoutFeedback style={{backgroundColor:'white',justifyContent:'center',alignItems:'center',width:Window.width/5,height:Window.height/10}} onPress={() => {
+            
             navigation.navigate("CarCreation");
         }}>
-            <Text style={{fontSize:40}}>+</Text>
+            <Text style={[{fontSize:40}]}>+</Text>
             </TouchableWithoutFeedback>
         </Animated.View>
     }
 
     
     return <Pressable style={{flex:1}} onPress={() => {
-        garageData.selectedCarProperties = item;
-        navigation.navigate('TechnicalDetails');
+        db.transaction(tx => {
+            tx.executeSql(`SELECT * FROM cars WHERE id=?`,[item.id],(tx,result) => {
+                garageData.selectedCarProperties = result.rows.item(0);
+                navigation.navigate('TechnicalDetails');
+            });
+        })
+        
+        
     }}>
-    <Animated.View style={[styles.cardContainer,{backgroundColor:"white",flex:1,justifyContent:'center'},style]}>
-        <Animated.View entering={SlideInDown} style={[styles.cardContainer,{flex:1,justifyContent:'space-between'}]}>
-            <View style={[styles.cardContainer,{flex:0.2,backgroundColor:'white',justifyContent:'center',alignItems:'center'}]}>
-                <Text style={{fontSize:AppConstants.yearSize}}>{item.year}</Text>
-                <Text style={{fontSize:AppConstants.nameSize}}>{item.name}</Text>
-            </View>
-            <View>
-            </View>
-            <View style={[styles.cardContainer,{flex:0.08,backgroundColor:'white',alignItems:'center',justifyContent:'center'}]}>
-                <Text style={{fontSize:20}}>Status</Text>
-            </View>
-        </Animated.View>
+    <Animated.View entering={SlideInDown} key={item.id} style={[styles.cardContainer,style,{flex:1,backgroundColor:'white',justifyContent:'space-between'}]}>
+        <View style={[styles.cardContainer,{flex:0.2,backgroundColor:'white',justifyContent:'center',alignItems:'center'}]}>
+            {item.alias != null && item.alias != "" && (() => <>
+            <Text style={{fontSize:AppConstants.yearSize}}>{item.year}</Text>
+            <Text style={{fontSize:AppConstants.cardAliasSize}}>{item.alias}</Text>
+            <Text style={{fontSize:AppConstants.nameSize,opacity:0.6,textAlign:'center'}}>{item.name}</Text></>)()}
+            {(item.alias == null || item.alias == "") && (() => {
+                return <><Text style={{fontSize:AppConstants.yearSize}}>{item.year}</Text>
+                <Text style={{fontSize:AppConstants.cardAliasSize,textAlign:'center'}}>{item.name}</Text>
+                </>
+            })()}
+        </View>
+        <View>
+        </View>
+        <View style={[styles.cardContainer,{flex:0.08,backgroundColor:'white',alignItems:'center',justifyContent:'center'}]}>
+            <Text style={{fontSize:20}}>Status</Text>
+        </View>
     </Animated.View>
     </Pressable>
 

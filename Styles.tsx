@@ -18,7 +18,10 @@ export const AppColors = {
 
 export const AppConstants = {
     yearSize:22,
-    nameSize:32,
+    nameSize:22,
+    normalSize:20,
+    borderSize:10,
+    cardAliasSize:32,
 };
 
 export const styles = StyleSheet.create({
@@ -47,9 +50,6 @@ export const styles = StyleSheet.create({
     }
 });
 
-export const triggerGarageReRender = (garageData) => {
-    garageData.shouldRenderStateFunc(Math.random() * 100000);
-}
 
 
 

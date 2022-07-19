@@ -22,10 +22,10 @@ const loadingFunc = async () => {
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   };
   
-  if(!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/cars_data.db')).exists){
+  if(!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'cars_data.db')).exists){
     await FileSystem.downloadAsync(
       Asset.fromModule(require('./assets/cars_data.db')).uri,
-      FileSystem.documentDirectory + `SQLite/cars_data.db`
+      FileSystem.documentDirectory + `cars_data.db`
     );
   }
   
@@ -42,7 +42,7 @@ export default function App() {
     <DBContext.Provider value={{garageDB:InitDBContext(),allCarsDB:InitAllCarsDB()}}>
     <GarageContext.Provider value={{selectedCarProperties:null,carousel:null,carsData:[],setCarsData:(arr) => {},shouldRenderStateFunc:(randomData) => {}}}>
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName='Garage' >
         <Stack.Screen name="Garage" component={Garage} options={{headerShown:false}}></Stack.Screen>
         <Stack.Screen name="CarCreation" component={CarCreation} options={{headerShown:false,animation:'fade_from_bottom'}}></Stack.Screen>
         <Stack.Screen name="TechnicalDetails" component={TechnicalDetails} options={{headerShown:false,animation:'none'}}></Stack.Screen>
