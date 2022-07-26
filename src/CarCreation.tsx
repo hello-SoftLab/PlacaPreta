@@ -6,7 +6,7 @@ import { DBContext, DBFunctions } from "./Backend";
 import { SearchBar } from "@rneui/base";
 import { FlatList, GestureHandlerRootView, NativeViewGestureHandler, ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated,{acc, LightSpeedInLeft, runOnJS, useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
-import App from "./App";
+import App from "../App";
 import {BlurView} from 'expo-blur';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Button } from "react-native-elements";
@@ -246,6 +246,8 @@ export const CarCreation = ({navigation}) => {
         postSelectionPopupPosition.value = withTiming(0,{duration:500});
         postSelectionPopupOpacity.value = withTiming(0,{duration:500},(isFinished) => {
             if(isFinished){
+                postSelectionPopupHeight.value = withTiming(0,{duration:0})
+                postSelectionPopupWidth.value = withTiming(0,{duration:0})
                 runOnJS(disablePopupFunc)();
             }
         });
@@ -269,7 +271,7 @@ export const CarCreation = ({navigation}) => {
             <Animated.View style={[styles.carCreationContainer,{justifyContent:'flex-start'}]}>
             
                 <View style={{width:'100%'}}>
-                    <SearchBar value={searchText} placeholder={"Procure por modelo,marca..."} onChangeText={(text) => { setSearchText(text)}} containerStyle={{backgroundColor:'black',borderBottomWidth:0}}>
+                    <SearchBar value={searchText} placeholder={"Procure por modelo,marca..."} onChangeText={(text) => {setSearchText(text)}} containerStyle={{backgroundColor:'black',borderBottomWidth:0}}>
                     </SearchBar>
                 </View>
             
@@ -287,10 +289,10 @@ export const CarCreation = ({navigation}) => {
                    postSelectionPopupOpacity.value = withTiming(1,{duration:500});
                 }}>
                 <Animated.View style={[{justifyContent:'center',alignItems:'center',borderRadius:50,position:'absolute',width:Window.width/4,height:Window.height/20,backgroundColor:AppColors.yellow},SelectButtonStyle]}>
-                    <Text>Select</Text>
+                    <Text style={{fontFamily:AppConstants.fontFE}}>Select</Text>
                 </Animated.View>
                 </Pressable>
-                <Animated.View style={[PostSelectionPopupStyle,{position:'absolute',borderRadius:15,alignSelf:'center',backgroundColor:AppColors.yellow,borderWidth:1}]}>
+                <Animated.View style={[PostSelectionPopupStyle,{position:'absolute',zIndex:30,borderRadius:15,alignSelf:'center',backgroundColor:AppColors.yellow,borderWidth:1}]}>
                     <View style={{flexDirection:'row',flex:0.2}}>
                         <View style={{flex:1}}>
                         </View>

@@ -53,8 +53,8 @@ export default function Card({item,index,animationValue}) {
     <Animated.View entering={SlideInDown} key={item.id} style={[styles.cardContainer,style,{flex:1,backgroundColor:'white',justifyContent:'space-between'}]}>
         <View style={[styles.cardContainer,{flex:0.2,backgroundColor:'white',justifyContent:'center',alignItems:'center'}]}>
             {item.alias != null && item.alias != "" && (() => <>
-            <Text style={{fontSize:AppConstants.yearSize}}>{item.year}</Text>
-            <Text style={{fontSize:AppConstants.cardAliasSize}}>{item.alias}</Text>
+            <Text style={{fontSize:AppConstants.yearSize,fontFamily:AppConstants.fontFE}}>{item.year}</Text>
+            <Animated.Text style={{fontSize:AppConstants.cardAliasSize,fontFamily:AppConstants.fontFE}}>{item.alias}</Animated.Text>
             <Text style={{fontSize:AppConstants.nameSize,opacity:0.6,textAlign:'center'}}>{item.name}</Text></>)()}
             {(item.alias == null || item.alias == "") && (() => {
                 return <><Text style={{fontSize:AppConstants.yearSize}}>{item.year}</Text>

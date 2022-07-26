@@ -17,6 +17,8 @@ export const AppColors = {
 }
 
 export const AppConstants = {
+    fontFE:'fe-font',
+    fontInter:'inter',
     yearSize:22,
     nameSize:22,
     normalSize:20,
