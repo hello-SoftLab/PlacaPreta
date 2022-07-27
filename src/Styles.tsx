@@ -11,7 +11,7 @@ export const Window = {
 };
 
 export const AppColors = {
-    yellow: 'rgb(255,197,48)',
+    yellow: '#ffb331',
     black : 'rgb(0,0,0)',
     white:'rgb(255,255,255)'
 }
@@ -47,6 +47,7 @@ export const styles = StyleSheet.create({
         alignSelf:'center',
         borderRadius:10
     },
+    selectButton: {zIndex:0,justifyContent:'center',alignItems:'center',borderRadius:50,position:'absolute',width:Window.width/4,height:Window.height/20,backgroundColor:AppColors.yellow},
     profileContainer: {
         borderRadius:10,width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:AppColors.yellow
     },

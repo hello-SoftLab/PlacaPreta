@@ -12,6 +12,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Button } from "react-native-elements";
 import { CarSelectionPropertiesView } from "./CarSelectionPropertiesView";
 import Tubes from './tubes';
+import { CarSelectionPropertiesSelector } from "./CarSelectionPropertiesSelector";
 
 // Item da escolha de carros (ex. Alpha romeo)
 const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,modalVisibleVal}) => {
@@ -68,9 +69,11 @@ export const CarCreation = ({navigation}) => {
     const [searchText,setSearchText] = useState("");
     const [selected,setSelected] = useState('');
     const [modalVisible,setModalVisibility] = useState(false);
+    const [customizationVisibility,setCustomizationVisibility] = useState(false);
     const selectButtonOpacity = useRef(useSharedValue(0)).current;
     const selectButtonPosition = useRef(useSharedValue(0)).current;
     const overralOpacity = useSharedValue(1);
+
     
     
 
@@ -120,12 +123,11 @@ export const CarCreation = ({navigation}) => {
         });
         
        setModalVisibility(true);
-       overralOpacity.value = withTiming(0,{duration:500})
     }
 
     const onLeave = () => {
         DBFunctions.removeCar(insertedCarID.value,carsDB);
-        overralOpacity.value = withTiming(1,{duration:500},() => runOnJS(setModalVisibility)(false))
+        setModalVisibility(false);
     }
 
     const cardRenderItem = () => {
@@ -133,13 +135,15 @@ export const CarCreation = ({navigation}) => {
         const [year,setYear] = useState('');
         const [name,setName] = useState('');
         const [motor,setMotor] = useState('');
+        const [fuel,setFuel] = useState('');
 
         db.readTransaction(tx => {
-            tx.executeSql("SELECT year,name,motor FROM history_of_cars WHERE name=?",[selected],(tx,result) => {
+            tx.executeSql("SELECT year,name,motor,fuel FROM history_of_cars WHERE name=?",[selected],(tx,result) => {
                 if(result.rows.length != 0){
                     setYear(result.rows._array[0].year)
                     setName(result.rows._array[0].name)
                     setMotor(result.rows.item(0).motor)
+                    setFuel(result.rows.item(0).fuel)
                 }
             },(tx,err) => {
                 console.log(err);
@@ -151,7 +155,13 @@ export const CarCreation = ({navigation}) => {
             <View style={{alignItems:'center'}}>
                 <Text style={{fontSize:AppConstants.yearSize,fontFamily:AppConstants.fontFE,marginBottom:10,marginTop:24}}>{year}</Text>
                 <Text style={{fontSize:AppConstants.nameSize + 2,fontFamily:AppConstants.fontFE,textAlign:'center'}}>{name}</Text>
-                <Tubes height={100} width={'92%'} scaleY={1.5}></Tubes>
+                <Tubes height={100} width={'92%'} scaleY={1.3}></Tubes>
+            </View>
+            <View style={{height:Window.height/1.2,width:'92%',alignSelf:'center'}}>
+                <Text style={[styles.generalText,{textAlign:'left',fontSize:AppConstants.yearSize-2}]}>{`MOTOR`}</Text>
+                <Text style={[styles.generalText,{textAlign:'center',fontSize:AppConstants.yearSize-2,margin:20}]}>{`${motor}`}</Text>
+                <Text style={[styles.generalText,{textAlign:'left',fontSize:AppConstants.yearSize-2}]}>{`combustivel`}</Text>
+                <Text style={[styles.generalText,{textAlign:'center',fontSize:AppConstants.yearSize-2,margin:20}]}>{`${fuel}`}</Text>
             </View>
         </>
     }
@@ -162,9 +172,9 @@ export const CarCreation = ({navigation}) => {
         }
     })
     
+
     return <GestureHandlerRootView style={{flex:1}}><Animated.View style={[styles.container]}>
             <Animated.View style={[styles.carCreationContainer,onPressStyle,{justifyContent:'flex-start'}]}>
-
                 <View style={{width:'100%'}}>
                     <SearchBar value={searchText} placeholder={"Procure por modelo,marca..."} onChangeText={(text) => {setSearchText(text)}} containerStyle={{backgroundColor:'black',borderBottomWidth:0}}>
                     </SearchBar>
@@ -176,8 +186,10 @@ export const CarCreation = ({navigation}) => {
                     </Animated.View>
                 </Pressable>
             </Animated.View>
-            <CarSelectionPropertiesView renderItem={cardRenderItem()} visible={modalVisible} onLeave={onLeave}></CarSelectionPropertiesView>
-            
+            <CarSelectionPropertiesView renderItem={cardRenderItem()} visible={modalVisible} onLeave={onLeave} onConfirm={() => {
+                setCustomizationVisibility(true);
+            }}></CarSelectionPropertiesView>
+            <CarSelectionPropertiesSelector visible={customizationVisibility}></CarSelectionPropertiesSelector>
     </Animated.View>
     </GestureHandlerRootView>
 }
