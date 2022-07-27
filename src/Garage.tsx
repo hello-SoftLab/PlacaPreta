@@ -1,8 +1,8 @@
-import { View,Text, Pressable } from "react-native"
+import { View,Text, Pressable, Button } from "react-native"
 import { AnimationsContext, GarageContext, styles, Window } from "./Styles"
 import Carousel from 'react-native-reanimated-carousel';
 import Card from "./Card";
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { DBContext } from "./Backend";
 import Animated, { useSharedValue, withTiming,SlideInDown, useAnimatedStyle, modulo, interpolate } from "react-native-reanimated";
 import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHandler } from "react-native-gesture-handler";
@@ -75,6 +75,15 @@ export const Garage = () => {
 
     
     return<GestureHandlerRootView style={{flex:1}}><Animated.View style={styles.container}>
+        <View style={{position:'absolute',top:60,zIndex:1}}>
+        <Button title={'Clear'} onPress={() => {
+            db.transaction(tx => {
+                tx.executeSql("DELETE FROM cars",[],(tx,result) => {
+                    setMyData([{id:-1}])
+                })
+            });
+        }}></Button>
+        </View>
         <Animated.View style={CarouselOpacityStyle}>
         <Carousel ref={(carousel) => data.carousel = carousel} loop={false} mode="parallax" modeConfig={{parallaxScrollingScale:0.7,parallaxScrollingOffset:200,parallaxAdjacentItemScale:0.6}}
         width={Window.width}

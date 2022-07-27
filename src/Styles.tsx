@@ -23,7 +23,7 @@ export const AppConstants = {
     nameSize:22,
     normalSize:20,
     borderSize:10,
-    cardAliasSize:32,
+    cardAliasSize:30,
 };
 
 export const styles = StyleSheet.create({
@@ -49,6 +49,10 @@ export const styles = StyleSheet.create({
     },
     profileContainer: {
         borderRadius:10,width:Window.width*0.7,height:Window.height/1.2,position:'absolute',justifyContent:'space-between',backgroundColor:AppColors.yellow
+    },
+    generalText: {
+        fontFamily:AppConstants.fontFE,
+        textAlign:'center'
     }
 });
 

@@ -142,6 +142,12 @@ export const InitAllCarsDB = () => {
 
     console.log(`db version = ${db.version}`)
 
+    db.transaction(tx => {
+        tx.executeSql(`SELECT COUNT(*) FROM history_of_cars`,[],(tx,result)=>{
+            console.log(`data count => ${JSON.stringify(result.rows._array)}`)
+        })
+    })
+
     
     return db;
 }

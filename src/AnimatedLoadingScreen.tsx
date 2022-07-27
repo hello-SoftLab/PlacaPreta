@@ -49,7 +49,6 @@ function AnimatedSplashScreen({children,image}) {
                         );
                     }
                     
-                console.log("loading fonts")
                 await Font.loadAsync({
                     'fe-font':require('./../assets/fonts/FE-FONT.ttf'),
                     'inter':require('./../assets/fonts/Inter-Regular.ttf')
