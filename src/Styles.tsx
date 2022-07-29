@@ -1,9 +1,11 @@
 import { Database } from "expo-sqlite";
-import { createContext } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import React, { createContext } from "react";
+import { Dimensions, StyleSheet, TextStyle, View } from "react-native";
 import { SharedValue, useSharedValue } from "react-native-reanimated";
 import { ICarouselInstance } from "react-native-reanimated-carousel";
-
+import { Text } from "react-native-elements";
+import { StyleProp } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const Window = {
     width: Dimensions.get("window").width,
@@ -13,17 +15,18 @@ export const Window = {
 export const AppColors = {
     yellow: '#ffb331',
     black : 'rgb(0,0,0)',
-    white:'rgb(255,255,255)'
+    white:'rgb(255,255,255)',
+    red: '#801112'
 }
 
 export const AppConstants = {
     fontFE:'fe-font',
     fontInter:'inter',
-    yearSize:22,
-    nameSize:22,
+    yearSize:18,
+    nameSize:18,
     normalSize:20,
     borderSize:10,
-    cardAliasSize:30,
+    cardAliasSize:25,
 };
 
 export const styles = StyleSheet.create({
@@ -64,3 +67,32 @@ export const AnimationsContext = createContext({detailsAnimationProgress: null a
 
 export const GarageContext = createContext({selectedCarProperties: null ,shouldRenderStateFunc:null,carousel: null as ICarouselInstance,carsData: null,setCarsData: null});
 
+
+interface TextInterface { 
+    style?: StyleProp<TextStyle>,
+    children?:React.ReactNode
+}
+
+interface ButtonInterface {
+    style?: StyleProp<TextStyle>,
+    children?:React.ReactNode
+}
+
+export const NormalSizeText = ({children,style} : TextInterface) => {
+    return <Text style={[{fontFamily:AppConstants.fontFE,fontSize:AppConstants.normalSize},style]}>{children}</Text>
+}
+export const YearSizeText = ({children,style} : TextInterface) => {
+    return <Text style={[{fontFamily:AppConstants.fontFE,fontSize:AppConstants.yearSize},style]}>{children}</Text>
+}
+
+export const CarNameSizeText = ({children,style} : TextInterface) => {
+    return <Text style={[{fontFamily:AppConstants.fontFE,fontSize:AppConstants.cardAliasSize},style]}>{children}</Text>
+}
+
+export const RedRoundButton = ({children,style} : ButtonInterface) => {
+    return <TouchableOpacity>
+            <View style={[{alignItems:'center',backgroundColor:AppColors.red,borderRadius:7},style]}>
+                {children}
+            </View>
+        </TouchableOpacity>
+}

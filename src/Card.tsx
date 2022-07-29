@@ -3,7 +3,6 @@ import { Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
 import Animated, { Extrapolate, interpolate, useAnimatedStyle,SlideInDown, useSharedValue, withTiming } from "react-native-reanimated";
 import { DBContext } from "./Backend";
 import { AnimationsContext, AppConstants, GarageContext, styles, Window } from "./Styles";
-// will be fine
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from "@react-navigation/native";
 

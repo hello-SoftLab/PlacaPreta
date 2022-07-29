@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
+import { Dimensions, StyleProp, ViewStyle } from "react-native";
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, View } from "react-native";
-import Animated, { runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { AppColors, Window } from "./Styles";
+import Animated, { AnimatedStyleProp, max, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { AppColors} from "./Styles";
 
+
+const Window = {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height
+};
 
 const enum relativeCardPositions {
     top ='top',
@@ -14,20 +20,18 @@ const enum relativeCardPositions {
 interface PopupCardProps {
     visible: Boolean,
     onScroll?: ((event: NativeSyntheticEvent<NativeScrollEvent>) => void) | Animated.Node<(event: NativeSyntheticEvent<NativeScrollEvent>) => void>,
-    children?: JSX.Element,
+    children?: React.ReactNode,
     initialPos?: number,
     finalPos?: number,
     posRelation?:relativeCardPositions,
-    onExit?: () => void
+    onExit?: () => void,
+    maxHeight?: number,
+    bgColor?: string
 
 }
 
 
-
-
-
-
-export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRelation,onExit} : PopupCardProps) => {
+export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRelation,onExit,maxHeight,bgColor} : PopupCardProps) => {
     const position = useSharedValue(initialPos? initialPos : -Window.height);
     const width = useSharedValue(0);
     const height = useSharedValue(0);
@@ -38,9 +42,8 @@ export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRela
     const style = useAnimatedStyle(() => {
 
         let val = {
-            top:Window.height/5,
             width:width.value,
-            height:height.value
+            height:maxHeight? maxHeight : height.value
         }
 
 
@@ -50,7 +53,6 @@ export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRela
     const scrollStyle = useAnimatedStyle(() => {
 
         let val = {
-
         }
 
         if(posRelation){
@@ -80,6 +82,9 @@ export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRela
                 height.value = 0;
                 backGroundWidth.value = 0;
                 backGroundHeight.value = 0;
+                if(onExit){
+                    onExit();
+                }
             }
         }
 
@@ -89,9 +94,6 @@ export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRela
     }
 
     const onChange = () => {
-        if(onExit){
-            onExit();
-        }
         leaveMainWindow();        
     }
 
@@ -111,7 +113,7 @@ export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRela
     useEffect(() => {
         if(visible){
             width.value = Window.width/1.2;
-            height.value = Window.height;
+            height.value = maxHeight? maxHeight : Window.height;
             backGroundWidth.value = Window.width;
             backGroundHeight.value = Window.height;
             bgOpacity.value = withTiming(1,{duration:500});
@@ -125,14 +127,12 @@ export const PopupCard = ({visible,children,onScroll,initialPos,finalPos,posRela
 
     return <>
     <Animated.View style={[bgStyle,{position:'absolute'}]}>
-        <Animated.ScrollView contentContainerStyle={{height:'125%'}} onScroll={onScroll? onScroll : gestureHandler} scrollEventThrottle={1.2} style={scrollStyle} showsVerticalScrollIndicator={false}>
-            <Animated.View style={[style,{zIndex:30,borderRadius:15,alignSelf:'center',backgroundColor:AppColors.white,borderWidth:1}]}>
-                <View style={{flexDirection:'row',flex:0.2}}>
-                    <View style={{flex:1}}>
-                        {children}
-                    </View>
-                </View>
+        <Animated.ScrollView contentContainerStyle={{flexGrow:1}}  onScroll={onScroll? onScroll : gestureHandler} scrollEventThrottle={1.2} style={scrollStyle} showsVerticalScrollIndicator={false}>
+            <View style={{height:Window.height/15}}></View>
+            <Animated.View style={[style,{flex:1,zIndex:30,borderRadius:15,alignSelf:'center',backgroundColor:bgColor? bgColor : 'white',borderWidth:1}]}>
+                        {visible && children}
             </Animated.View>
+            <View style={{height:Window.height/5}}></View>
         </Animated.ScrollView>
     </Animated.View>
     </>

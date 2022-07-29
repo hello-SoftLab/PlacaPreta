@@ -30,7 +30,6 @@ export const MainScreen = () => {
       <Stack.Navigator initialRouteName='Garage'>
         <Stack.Screen name="Garage" component={Garage} options={{headerShown:false}}></Stack.Screen>
         <Stack.Screen name="CarCreation" component={CarCreation} options={{headerShown:false,animation:'fade_from_bottom'}}></Stack.Screen>
-        <Stack.Screen name="TechnicalDetails" component={TechnicalDetails} options={{headerShown:false,animation:'none'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
     </GarageContext.Provider>

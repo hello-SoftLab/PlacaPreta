@@ -9,6 +9,7 @@ import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHand
 import { Navigation } from "react-native-navigation";
 import { useNavigation } from "@react-navigation/native";
 import { PopupCard } from "./PopupCard";
+import { TechnicalDetails } from "./TechnicalDetails";
 
 
 
@@ -107,6 +108,8 @@ export const Garage = () => {
             </Animated.View>
         </GestureDetector>
     </Animated.View>
-    <PopupCard visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}></PopupCard>
+    <PopupCard maxHeight={Window.height*2} visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}>
+        <TechnicalDetails navigation={navigation}></TechnicalDetails>
+    </PopupCard>
     </GestureHandlerRootView> 
 }
