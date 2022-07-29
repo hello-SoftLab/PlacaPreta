@@ -57,16 +57,18 @@ export const CarSelectionPropertiesView = ({visible,renderItem,onLeave,onConfirm
 
 
     const leaveMainWindow = () => {
-        const func = () => {
-            width.value = 0;
-            height.value = 0;
-            backGroundWidth.value = 0;
-            backGroundHeight.value = 0;
+        const func = (finished) => {
+            if(finished){
+                width.value = 0;
+                height.value = 0;
+                backGroundWidth.value = 0;
+                backGroundHeight.value = 0;
+            }
         }
 
 
         position.value = withTiming(-Window.height,{duration:500});
-        bgOpacity.value = withTiming(0,{duration:800},() => runOnJS(func)());
+        bgOpacity.value = withTiming(0,{duration:800},(finished) => runOnJS(func)(finished));
     }
 
     const onChange = () => {
@@ -85,7 +87,7 @@ export const CarSelectionPropertiesView = ({visible,renderItem,onLeave,onConfirm
         },
         onScroll: (event, context) => {
             if(event.contentOffset.y > Window.height/7){
-                selectPosition.value = withTiming(Window.height/25,{duration:500});
+                selectPosition.value = withTiming(Window.height/15,{duration:500});
                 selectOpacity.value = withTiming(1,{duration:500});
                 
             }
@@ -108,6 +110,9 @@ export const CarSelectionPropertiesView = ({visible,renderItem,onLeave,onConfirm
             bgOpacity.value = withTiming(1,{duration:500});
             position.value = withTiming(0,{duration:500});
         }
+        else {
+            leaveMainWindow();
+        }
     },[visible])
 
 
@@ -129,7 +134,6 @@ export const CarSelectionPropertiesView = ({visible,renderItem,onLeave,onConfirm
         if(onConfirm){
             onConfirm();
         }
-        leaveMainWindow();
     }}>
     <Animated.View style={[styles.selectButton,selectStyle]}> 
         <Text style={{fontFamily:AppConstants.fontFE}}>Adicionar</Text>

@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 
 //card para garagem
-export default function Card({item,index,animationValue}) { 
+export default function Card({item,index,animationValue,viewCarProperties}) { 
 
     const generalAlpha = useSharedValue(0.2);
     const animationsContext = useContext(AnimationsContext);
@@ -44,7 +44,7 @@ export default function Card({item,index,animationValue}) {
         db.transaction(tx => {
             tx.executeSql(`SELECT * FROM cars WHERE id=?`,[item.id],(tx,result) => {
                 garageData.selectedCarProperties = result.rows.item(0);
-                navigation.navigate('TechnicalDetails');
+                viewCarProperties(true)
             });
         })
         

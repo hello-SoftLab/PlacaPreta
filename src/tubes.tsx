@@ -7,14 +7,15 @@ import { AppColors } from "./Styles"
 interface TubeProps {
   width?:number | string,
   height?:number | string,
-  scaleY?: number
+  scaleY?: number,
+  color?: string
 }
 
 const SvgComponent = (props : TubeProps) => (
   <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 493.36 57.72" width={props.width} height={props.height}>
     <Defs></Defs>
     <G id="Camada_2" data-name="Camada 2">
-      <G id="Camada_2-2" data-name="Camada 2" stroke={AppColors.yellow} strokeWidth={10} scaleY={props.scaleY} >
+      <G id="Camada_2-2" data-name="Camada 2" stroke={props.color? props.color : AppColors.yellow} strokeWidth={10} scaleY={props.scaleY? props.scaleY : 1} >
         <Path 
           className="cls-1"
           d="M63.67 46.62s19 5.76 38.69 4.74c6.72-.35 14.77-.44 22.47-.42 15 0 28.6.54 28.6.54s12.09 1.67 30.21-8.24"

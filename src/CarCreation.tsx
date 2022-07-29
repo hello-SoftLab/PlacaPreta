@@ -174,14 +174,18 @@ export const CarCreation = ({navigation}) => {
     
 
     return <GestureHandlerRootView style={{flex:1}}><Animated.View style={[styles.container]}>
+                
             <Animated.View style={[styles.carCreationContainer,onPressStyle,{justifyContent:'flex-start'}]}>
                 <View style={{width:'100%'}}>
                     <SearchBar value={searchText} placeholder={"Procure por modelo,marca..."} onChangeText={(text) => {setSearchText(text)}} containerStyle={{backgroundColor:'black',borderBottomWidth:0}}>
                     </SearchBar>
                 </View>
                 <FlatList scrollEnabled={!modalVisible} windowSize={10} style={{width:'100%',borderBottomLeftRadius:10,borderBottomRightRadius:10}} data={data} renderItem={renderItem}></FlatList>
+            </Animated.View>
+            </Animated.View>
+            <Animated.View style={[{alignSelf:'center',alignItems:'center',position:'absolute'},SelectButtonStyle]}>
                 <Pressable style={{alignSelf:'center',alignItems:'center'}} onPress={selectButtonPressableCallback}>
-                    <Animated.View style={[{justifyContent:'center',alignItems:'center',borderRadius:50,position:'absolute',width:Window.width/4,height:Window.height/20,backgroundColor:AppColors.yellow},SelectButtonStyle]}>
+                    <Animated.View style={[{justifyContent:'center',alignItems:'center',borderRadius:50,width:Window.width/4,height:Window.height/20,backgroundColor:AppColors.yellow},SelectButtonStyle]}>
                         <Text style={{fontFamily:AppConstants.fontFE}}>VER</Text>
                     </Animated.View>
                 </Pressable>
@@ -189,7 +193,9 @@ export const CarCreation = ({navigation}) => {
             <CarSelectionPropertiesView renderItem={cardRenderItem()} visible={modalVisible} onLeave={onLeave} onConfirm={() => {
                 setCustomizationVisibility(true);
             }}></CarSelectionPropertiesView>
-            <CarSelectionPropertiesSelector visible={customizationVisibility}></CarSelectionPropertiesSelector>
-    </Animated.View>
+            <CarSelectionPropertiesSelector carID={insertedCarID.value} onGoBack={() => {
+                setCustomizationVisibility(false);
+            }} visible={customizationVisibility}></CarSelectionPropertiesSelector>
+    
     </GestureHandlerRootView>
 }

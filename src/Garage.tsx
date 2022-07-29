@@ -8,6 +8,7 @@ import Animated, { useSharedValue, withTiming,SlideInDown, useAnimatedStyle, mod
 import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHandler } from "react-native-gesture-handler";
 import { Navigation } from "react-native-navigation";
 import { useNavigation } from "@react-navigation/native";
+import { PopupCard } from "./PopupCard";
 
 
 
@@ -23,6 +24,7 @@ export const Garage = () => {
     const shouldShowProfile = useSharedValue(false);
     const profilePictureOpacity = useSharedValue(0);
     const profileLogo = useSharedValue(0);
+    const [isCardPopupVisible,setCardPopupVisibility] = useState(false);
     animationsData.garageBottomCardPosition = useSharedValue(-Window.height/1.35);
 
     //movimento do card de profile
@@ -73,6 +75,7 @@ export const Garage = () => {
         }
     })
 
+    const renderItem = ({item,index,animationValue})=><Card viewCarProperties={setCardPopupVisibility} item={item} animationValue={animationValue} index={index}></Card>
     
     return<GestureHandlerRootView style={{flex:1}}><Animated.View style={styles.container}>
         <View style={{position:'absolute',top:60,zIndex:1}}>
@@ -89,7 +92,7 @@ export const Garage = () => {
         width={Window.width}
         height={Window.height/1.05}
         data={myData}
-        renderItem={({item,index,animationValue})=><Card item={item} animationValue={animationValue} index={index}></Card>}></Carousel>
+        renderItem={renderItem}></Carousel>
         </Animated.View>
         {/* Profile View! */}
         <GestureDetector gesture={gesture}>
@@ -104,5 +107,6 @@ export const Garage = () => {
             </Animated.View>
         </GestureDetector>
     </Animated.View>
+    <PopupCard visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}></PopupCard>
     </GestureHandlerRootView> 
 }

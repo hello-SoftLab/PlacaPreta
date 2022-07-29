@@ -14,11 +14,11 @@ export const InitDBContext = () => {
     
 
     const statements = [
+        `DROP TABLE IF EXISTS cars`,
       `CREATE TABLE IF NOT EXISTS cars (
             id int,
             alias text,
-            aquisition_month,
-            aquisition_year,
+            aquisition_date,
             license_plate text,
             name text,
             color text,
