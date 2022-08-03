@@ -3,7 +3,7 @@ import { AnimationsContext, GarageContext, styles, Window } from "./Styles"
 import Carousel from 'react-native-reanimated-carousel';
 import Card from "./Card";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { DBContext } from "./Backend";
+import { DBContext, InitAllCarsDB, InitDBContext } from "./Backend";
 import Animated, { useSharedValue, withTiming,SlideInDown, useAnimatedStyle, modulo, interpolate } from "react-native-reanimated";
 import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHandler } from "react-native-gesture-handler";
 import { Navigation } from "react-native-navigation";
@@ -17,7 +17,8 @@ import { TechnicalDetails } from "./TechnicalDetails";
 export const Garage = () => {
 
     const data = useContext(GarageContext);
-    const db = useContext(DBContext).garageDB;
+    let db = useContext(DBContext).garageDB;
+    let mainDB = useContext(DBContext).allCarsDB;
     const animationsData = useContext(AnimationsContext);
     animationsData.detailsAnimationProgress = useSharedValue(false);
     const [reRenderDummy,setReRenderDummy] = useState(0);
@@ -47,6 +48,7 @@ export const Garage = () => {
         navigation.addListener('focus',() => {
             db.transaction(tx => {
                 tx.executeSql("SELECT * FROM cars",[],(tx,result) => {
+                    console.log(`refreshing cars db data, found ${result.rows.length} cars!`)
                     setMyData([...result.rows._array,{id:-1}]);
                 })
             });
@@ -108,8 +110,8 @@ export const Garage = () => {
             </Animated.View>
         </GestureDetector>
     </Animated.View>
-    <PopupCard maxHeight={Window.height*2} visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}>
-        <TechnicalDetails navigation={navigation}></TechnicalDetails>
+    <PopupCard visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}>
+        {isCardPopupVisible && <TechnicalDetails navigation={navigation}></TechnicalDetails>}
     </PopupCard>
     </GestureHandlerRootView> 
 }

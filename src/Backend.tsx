@@ -11,35 +11,20 @@ export const InitDBContext = () => {
 
     const db = SQLite.openDatabase('database.db');
 
-    
 
     const statements = [
+        `DROP TABLE IF EXISTS cars`,
       `CREATE TABLE IF NOT EXISTS cars (
             id int,
+            model TEXT,
+            year TEXT,
             alias text,
             aquisition_date,
             license_plate text,
-            name text,
-            color text,
-            year int,
-            doors int,
-            model text,
-            years_of_production text,
-            image_url text,
-            transmission text,
-            seats int,
-            wheel text,
-            motor text,
-            max_speed text,
-            acceleration text,
-            fuel text,
-            torque text,
-            base_power text,
-            max_power text
+            color text
         )`
     ]
 
-    
 
     console.log("initializing db!");
 
@@ -64,28 +49,15 @@ export const DBFunctions = {
     insertNewCar: (presetName: string,carsDB: Database,db: Database,cb) => {
         const id = Math.floor(Math.random()*1000000);
         db.transaction(tx => {
-            tx.executeSql("SELECT * FROM history_of_cars WHERE name=?",[presetName],(tx,result) => {
+            tx.executeSql("SELECT id,model,Ano FROM all_cars WHERE model=?",[presetName],(tx,result) => {
                 carsDB.transaction(txTwo => {
                     const item = result.rows.item(0);
-                    txTwo.executeSql(`INSERT INTO cars (id,name,year,doors,model,years_of_production,image_url,transmission,seats,wheel,motor,max_speed,acceleration,fuel,torque,base_power,max_power) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+                    console.log(JSON.stringify(item))
+                    txTwo.executeSql(`INSERT INTO cars (id,model,year) VALUES (?,?,?)`
                     ,[
                         id,
-                        item['name'],
-                        item['year'],
-                        item['doors'],
                         item['model'],
-                        item['years_of_production'],
-                        item['image_url'],
-                        item['transmission'],
-                        item['seats'],
-                        item['wheel'],
-                        item['motor'],
-                        item['max_speed'],
-                        item['acceleration'],
-                        item['fuel'],
-                        item['torque'],
-                        item['base_power'],
-                        item['max_power']
+                        item['Ano']
                     ],(txTwo,result) => {
                         cb();
                     },(txTwo,err) => {
@@ -93,6 +65,9 @@ export const DBFunctions = {
                         return false;
                     });
                 })
+            },(tx,err) => {
+                console.log(`ERROR SELECTING FROM all_cars with model = ${presetName}, ${err.message}`)
+                return false;
             });
             
         })
@@ -102,7 +77,6 @@ export const DBFunctions = {
         carsDB.transaction(tx => {
             tx.executeSql("DELETE FROM cars WHERE id=?",[idToRemove],(tx,result) => {
                 console.log(`Removed car with id = ${idToRemove}!`)
-                
             },(tx,err) => {
                 console.log(`Error ${err.message} when attempting to remove car with id = ${idToRemove}`)
                 return false;
@@ -135,18 +109,7 @@ export const DBFunctions = {
 }
 
 export const InitAllCarsDB = () => {
-    const db = SQLite.openDatabase('cars_data.db',undefined,undefined,undefined);
-
-    console.log("initializing cars_data db!");
-
-    console.log(`db version = ${db.version}`)
-
-    db.transaction(tx => {
-        tx.executeSql(`SELECT COUNT(*) FROM history_of_cars`,[],(tx,result)=>{
-            console.log(`data count => ${JSON.stringify(result.rows._array)}`)
-        })
-    })
-
+    const db = SQLite.openDatabase('all_cars.db');
     
     return db;
 }

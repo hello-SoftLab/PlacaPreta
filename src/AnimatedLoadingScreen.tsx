@@ -6,6 +6,7 @@ import * as FileSystem from 'expo-file-system'
 import * as Font from 'expo-font'
 import { View,Text} from "react-native";
 import {AppConstants} from './Styles'
+import { useFonts } from "expo-font";
 
 //função para mover o cars_data.db do folder assets pro folder dos documentos do celular
 
@@ -18,6 +19,10 @@ function AnimatedSplashScreen({children,image}) {
     const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
     const [isFirstAnimationComplete,setFirstAnimationComplete] = useState(false);
 
+    useFonts({
+        'fe-font':require('./../assets/fonts/FE-FONT.ttf'),
+        'inter':require('./../assets/fonts/Inter-Regular.ttf')
+    });
 
     console.log(`animation val = ${animationVar.value}`)
 
@@ -27,13 +32,13 @@ function AnimatedSplashScreen({children,image}) {
 
     useEffect(() => {
         if(isFirstAnimationComplete){
-            animationVar.value = withTiming(0,{duration:1000},(finished) => runOnJS(onAnimationEnd)(finished))
+            animationVar.value = withTiming(0,{duration:2000},(finished) => runOnJS(onAnimationEnd)(finished))
         }
     },[isFirstAnimationComplete])
 
     useEffect(() => {
         if(!isAppReady){
-            animationVar.value = withTiming(1,{duration:1000},finished => runOnJS(func)(finished))
+            animationVar.value = withTiming(1,{duration:2000},finished => runOnJS(func)(finished))
             prepare();
         }
         async function prepare() {
@@ -42,17 +47,14 @@ function AnimatedSplashScreen({children,image}) {
                     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
                 };
                 
-                if(!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'cars_data.db')).exists){
+                if(!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/cars_data.db')).exists){
                     await FileSystem.downloadAsync(
-                        Asset.fromModule(require('./../assets/cars_data.db')).uri,
-                        FileSystem.documentDirectory + `cars_data.db`
+                        Asset.fromModule(require('./../assets/all_cars.db')).uri,
+                        FileSystem.documentDirectory + `SQLite/all_cars.db`
                         );
-                    }
+                }
                     
-                await Font.loadAsync({
-                    'fe-font':require('./../assets/fonts/FE-FONT.ttf'),
-                    'inter':require('./../assets/fonts/Inter-Regular.ttf')
-                });
+                
             }
             catch(err){
                 console.log(err);
@@ -85,8 +87,8 @@ function AnimatedSplashScreen({children,image}) {
     const imageStyle = useAnimatedStyle(() => {
         return {
             opacity:animationVar.value,
-            width: "100%",
-            height: "100%",
+            height:'25%',
+            aspectRatio:1,
             transform: [
                 {
                   scale: animationVar.value,

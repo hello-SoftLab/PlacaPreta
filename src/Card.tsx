@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
 import Animated, { Extrapolate, interpolate, useAnimatedStyle,SlideInDown, useSharedValue, withTiming } from "react-native-reanimated";
 import { DBContext } from "./Backend";
@@ -15,6 +15,8 @@ export default function Card({item,index,animationValue,viewCarProperties}) {
     const animationsContext = useContext(AnimationsContext);
     const carouselRef = useContext(GarageContext).carousel;
     const garageData = useContext(GarageContext);
+    const [carModel,setCarModel] = useState('');
+    const [carYear,setCarYear] = useState('');
 
     const style = useAnimatedStyle(() => {
         //testing if in detailsAnimation
@@ -26,11 +28,12 @@ export default function Card({item,index,animationValue,viewCarProperties}) {
     const db = useContext(DBContext).garageDB;
     const navigation = useNavigation();
 
+    
+
     //Card para adicionar carro
     if(item.id == -1){
         return <Animated.View style={[styles.cardContainer,style,{width:'100%',backgroundColor:'white',flex:1,justifyContent:'center',alignSelf:'center',alignItems:'center'}]}>
                 <TouchableWithoutFeedback style={{backgroundColor:'white',justifyContent:'center',alignItems:'center',width:Window.width/5,height:Window.height/10}} onPress={() => {
-            
             navigation.navigate("CarCreation");
         }}>
             <Text style={[{fontSize:40}]}>+</Text>
@@ -54,10 +57,10 @@ export default function Card({item,index,animationValue,viewCarProperties}) {
             {item.alias != null && item.alias != "" && (() => <>
             <Text style={[styles.generalText,{fontSize:AppConstants.yearSize,marginTop:20,marginBottom:10}]}>{item.year}</Text>
             <Animated.Text style={[styles.generalText,{fontSize:AppConstants.cardAliasSize}]}>{item.alias}</Animated.Text>
-            <Text style={[styles.generalText,{fontSize:AppConstants.nameSize,opacity:0.6,textAlign:'center'}]}>{item.name}</Text></>)()}
+            <Text style={[styles.generalText,{fontSize:AppConstants.nameSize,opacity:0.6,textAlign:'center'}]}>{item.model}</Text></>)()}
             {(item.alias == null || item.alias == "") && (() => {
                 return <><Text style={[styles.generalText,{fontSize:AppConstants.yearSize,marginTop:20,marginBottom:10}]}>{item.year}</Text>
-                <Text style={[styles.generalText,{fontSize:AppConstants.cardAliasSize,textAlign:'center'}]}>{item.name}</Text>
+                <Text style={[styles.generalText,{fontSize:AppConstants.cardAliasSize,textAlign:'center'}]}>{item.model}</Text>
                 </>
             })()}
         </View>

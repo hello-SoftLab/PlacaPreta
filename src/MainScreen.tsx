@@ -9,7 +9,8 @@ import { Garage } from "./Garage";
 import { CarCreation } from "./CarCreation";
 import { TechnicalDetails } from "./TechnicalDetails";
 import { useFonts } from "expo-font";
-
+import { Asset } from "expo-asset";
+import * as FileSystem from 'expo-file-system';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,21 +19,11 @@ const Stack = createNativeStackNavigator();
 
 export const MainScreen = () => {
 
-    useFonts({
-      'fe-font':require('./../assets/fonts/FE-FONT.ttf'),
-      'inter':require('./../assets/fonts/Inter-Regular.ttf')
-    });
-
-    return <AnimationsContext.Provider value={{detailsAnimationProgress:null,detailsAnimationGeneralOpacity:null,garageBottomCardPosition:null}}>
-    <DBContext.Provider value={{garageDB:InitDBContext(),allCarsDB:InitAllCarsDB()}}>
-    <GarageContext.Provider value={{selectedCarProperties:null,carousel:null,carsData:[],setCarsData:(arr) => {},shouldRenderStateFunc:(randomData) => {}}}>
-    <NavigationContainer>
+    return <NavigationContainer>
       <Stack.Navigator initialRouteName='Garage'>
         <Stack.Screen name="Garage" component={Garage} options={{headerShown:false}}></Stack.Screen>
         <Stack.Screen name="CarCreation" component={CarCreation} options={{headerShown:false,animation:'fade_from_bottom'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
-    </GarageContext.Provider>
-    </DBContext.Provider>
-    </AnimationsContext.Provider>
+
 }

@@ -206,7 +206,6 @@ export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) 
         <RNDateTimePicker value={new Date()} mode='date' display='spinner' onChange={(event,date) => {
             const realDate = `${date.getUTCFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
             db.transaction(tx => {
-                
                 tx.executeSql(`UPDATE cars SET aquisition_date='?' WHERE id=?`,[realDate,carID],(tx,result) => {
                     console.log(`Setting aquisitionDate ${realDate} to carID = ${carID}`)
                 },(tx,err) => {

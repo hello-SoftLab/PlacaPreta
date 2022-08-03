@@ -1,7 +1,7 @@
 import { NavigationProp } from "@react-navigation/native";
 import React, { createContext, useContext, useEffect, useState,useRef } from "react";
 import { View,Text, Keyboard, Pressable, Modal } from "react-native";
-import { styles,Window,AppColors, GarageContext, AppConstants } from "./Styles";
+import { styles,Window,AppColors, GarageContext, AppConstants, NormalSizeText } from "./Styles";
 import { DBContext, DBFunctions } from "./Backend";
 import { SearchBar } from "@rneui/base";
 import { FlatList, GestureHandlerRootView, NativeViewGestureHandler, ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -9,10 +9,11 @@ import Animated,{acc, LightSpeedInLeft, runOnJS, useAnimatedStyle, useSharedValu
 import App from "../App";
 import {BlurView} from 'expo-blur';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Button } from "react-native-elements";
+import { Button, ListItem } from "react-native-elements";
 import { CarSelectionPropertiesView } from "./CarSelectionPropertiesView";
 import Tubes from './tubes';
 import { CarSelectionPropertiesSelector } from "./CarSelectionPropertiesSelector";
+import { PopupCard } from "./PopupCard";
 
 // Item da escolha de carros (ex. Alpha romeo)
 const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,modalVisibleVal}) => {
@@ -20,7 +21,7 @@ const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,mod
 
     const styleSelf = useAnimatedStyle(() => {
 
-        if(item.name == selected){
+        if(item.model == selected){
             return {
                 backgroundColor:AppColors.yellow
             }
@@ -32,8 +33,8 @@ const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,mod
     });
 
     const onPress = () => {
-        if(item.name != selected){
-            setSelected(item.name);
+        if(item.model != selected){
+            setSelected(item.model);
             opacityRef.value = withTiming(1,{duration:500});
             positionRef.value = withTiming(Window.height/20,{duration:500});
         }
@@ -47,7 +48,7 @@ const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,mod
 
     return <Pressable style={{flex:1,width:'100%',backgroundColor:'yellow'}} disabled={modalVisibleVal} onPress={onPress}>
             <Animated.View style={[{borderWidth:1,padding:10},styleSelf]}>
-                <Text style={{marginLeft:10,fontFamily:AppConstants.fontInter}}>{item.name}</Text>
+                <Text style={{marginLeft:10,fontFamily:AppConstants.fontInter}}>{item.model}</Text>
             </Animated.View>
         </Pressable>
     
@@ -65,7 +66,7 @@ export const CarCreation = ({navigation}) => {
     const garageData = useContext(GarageContext);
     const db = useContext(DBContext).allCarsDB;
     const carsDB = useContext(DBContext).garageDB;
-    const insertedCarID = useSharedValue(0);
+    const insertedCarID = useSharedValue(-1);
     const [searchText,setSearchText] = useState("");
     const [selected,setSelected] = useState('');
     const [modalVisible,setModalVisibility] = useState(false);
@@ -80,8 +81,9 @@ export const CarCreation = ({navigation}) => {
     useEffect(() => {
         
         db.readTransaction(tx => {
-            tx.executeSql(`SELECT name FROM history_of_cars WHERE name LIKE '%${searchText}%' ORDER BY name`,[],(tx,result) =>{
+            tx.executeSql(`SELECT model FROM all_cars WHERE model LIKE '%${searchText}%' ORDER BY model `,[],(tx,result) =>{
                 setData(result.rows._array);
+                console.log(result.rows.length)
             },(tx,error) => {
                 console.log(`Error ${error.message}`)
                 return false;
@@ -103,15 +105,7 @@ export const CarCreation = ({navigation}) => {
     }
     
 
-    const showSelectButton = () => {
-        selectButtonOpacity.value = withTiming(1,{duration:500});
-        selectButtonPosition.value = withTiming(Window.height/25,{duration:500});
-    };
-
-    const hideSelectButton = () => {
-        selectButtonOpacity.value = withTiming(0,{duration:500});
-        selectButtonPosition.value = withTiming(0,{duration:500});
-    }
+    
 
     const selectButtonPressableCallback = () => {
         if(selectButtonPosition.value == 0){
@@ -125,8 +119,13 @@ export const CarCreation = ({navigation}) => {
        setModalVisibility(true);
     }
 
+    useEffect(() => {
+    },[modalVisible])
+
     const onLeave = () => {
-        DBFunctions.removeCar(insertedCarID.value,carsDB);
+        if(insertedCarID.value != -1){
+            DBFunctions.removeCar(insertedCarID.value,carsDB);
+        }
         setModalVisibility(false);
     }
 
@@ -134,34 +133,50 @@ export const CarCreation = ({navigation}) => {
 
         const [year,setYear] = useState('');
         const [name,setName] = useState('');
-        const [motor,setMotor] = useState('');
-        const [fuel,setFuel] = useState('');
-
-        db.readTransaction(tx => {
-            tx.executeSql("SELECT year,name,motor,fuel FROM history_of_cars WHERE name=?",[selected],(tx,result) => {
-                if(result.rows.length != 0){
-                    setYear(result.rows._array[0].year)
-                    setName(result.rows._array[0].name)
-                    setMotor(result.rows.item(0).motor)
-                    setFuel(result.rows.item(0).fuel)
-                }
-            },(tx,err) => {
-                console.log(err);
-                return false;
+        const [modelInformation,setModelInformation] = useState({});
+        
+        useEffect(() => {
+            db.readTransaction(tx => {
+                tx.executeSql("SELECT * FROM all_cars WHERE model=?",[selected],(tx,result) => {
+                    if(result.rows.length != 0){
+                        const obj = result.rows._array[0];
+                        setYear(obj['Ano'])
+                        setName(obj['model'])
+                        const {id,ano,model, ...rest} = obj;
+                        const modelData = {};
+                        for(const key of Object.keys(rest)){
+                            if(rest[key] != null){
+                                modelData[key] = rest[key]
+                            } 
+                        }    
+                        setModelInformation(modelData);
+                        console.log(`result model => ${result.rows._array[0].model}`)
+                    }
+                },(tx,err) => {
+                    console.log(err);
+                    return false;
+                })
             })
-        })
+        },[selected])
+
 
         return <>
             <View style={{alignItems:'center'}}>
                 <Text style={{fontSize:AppConstants.yearSize,fontFamily:AppConstants.fontFE,marginBottom:10,marginTop:24}}>{year}</Text>
                 <Text style={{fontSize:AppConstants.nameSize + 2,fontFamily:AppConstants.fontFE,textAlign:'center'}}>{name}</Text>
-                <Tubes height={100} width={'92%'} scaleY={1.3}></Tubes>
+                <Tubes width={'92%'} scaleY={1.3}></Tubes>
             </View>
-            <View style={{height:Window.height/1.2,width:'92%',alignSelf:'center'}}>
-                <Text style={[styles.generalText,{textAlign:'left',fontSize:AppConstants.yearSize-2}]}>{`MOTOR`}</Text>
-                <Text style={[styles.generalText,{textAlign:'center',fontSize:AppConstants.yearSize-2,margin:20}]}>{`${motor}`}</Text>
-                <Text style={[styles.generalText,{textAlign:'left',fontSize:AppConstants.yearSize-2}]}>{`combustivel`}</Text>
-                <Text style={[styles.generalText,{textAlign:'center',fontSize:AppConstants.yearSize-2,margin:20}]}>{`${fuel}`}</Text>
+            <View style={{width:'92%',alignSelf:'center'}}>
+                {Object.keys(modelInformation).map((key,index) => {
+                    return <View key={"MainView" + index} style={{flexDirection:'row'}}>
+                        <View key={'leftMinorView' + index} style={{flex:0.5}}>
+                            <NormalSizeText style={{marginVertical:10,lineHeight:30}} key={index}>{key}: </NormalSizeText>
+                        </View>
+                        <View key={'rightMinorView' + index} style={{flex:0.5}}>
+                        <NormalSizeText style={{marginVertical:10,lineHeight:30,fontFamily:AppConstants.fontInter,fontSize:AppConstants.normalSize-2}} key={index + key}>{modelInformation[key]}</NormalSizeText>
+                        </View>
+                    </View>
+                })}
             </View>
         </>
     }

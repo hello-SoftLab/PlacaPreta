@@ -6,6 +6,7 @@ import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHand
 import Tubes from './../assets/svg/tubes';
 import { FullWindowOverlay } from "react-native-screens";
 import { DBContext } from "./Backend";
+import { PopupCard } from "./PopupCard";
 
 
 
@@ -117,17 +118,9 @@ export const CarSelectionPropertiesView = ({visible,renderItem,onLeave,onConfirm
 
 
     return <>
-    <Animated.View style={[bgStyle,{position:'absolute'}]}>
-        <Animated.ScrollView contentContainerStyle={{height:'125%'}} onScroll={gestureHandler} scrollEventThrottle={1.2} style={scrollStyle} showsVerticalScrollIndicator={false}>
-            <Animated.View style={[style,{zIndex:30,borderRadius:15,alignSelf:'center',backgroundColor:AppColors.white,borderWidth:1}]}>
-                <View style={{flexDirection:'row',flex:0.2}}>
-                    <View style={{flex:1}}>
-                        {renderItem}
-                    </View>
-                </View>
-            </Animated.View>
-        </Animated.ScrollView>
-    </Animated.View>
+    <PopupCard visible={visible} paddingBottom={Window.height/18} onExit={onLeave} onScroll={gestureHandler}>
+        {renderItem}
+    </PopupCard>
     <Pressable style={{alignSelf:'center',alignItems:'center'}} onPress={() => {
         selectOpacity.value = withTiming(0,{duration:500});
         selectPosition.value = withTiming(-Window.height/5,{duration:500});

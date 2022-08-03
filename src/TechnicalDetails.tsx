@@ -18,17 +18,15 @@ export function TechnicalDetails({navigation}) {
     
 
 
-    return <> 
-    
-    <View style={{borderTopLeftRadius:10,borderTopRightRadius:10,flex:1,width:'90%',alignSelf:'center'}}>
+    return <View style={{borderTopLeftRadius:10,borderTopRightRadius:10,width:'90%',alignSelf:'center'}}>
         <View style={{borderTopLeftRadius:10,borderTopRightRadius:10,marginVertical:'10%',justifyContent:'center',alignItems:'center'}}>
             {selectedItemData.alias != null && selectedItemData.alias != "" && (() => <>
             <YearSizeText>{selectedItemData.year}</YearSizeText>
             <CarNameSizeText>{selectedItemData.alias}</CarNameSizeText>
-            <NormalSizeText style={{opacity:0.6,textAlign:'center'}}>{selectedItemData.name}</NormalSizeText></>)()}
+            <NormalSizeText style={{opacity:0.6,textAlign:'center'}}>{selectedItemData.model}</NormalSizeText></>)()}
             {(selectedItemData.alias == null || selectedItemData.alias == "") && (() => {
                 return <><YearSizeText style={{padding:10}}>{selectedItemData.year}</YearSizeText>
-                <CarNameSizeText style={{textAlign:'center'}}>{selectedItemData.name}</CarNameSizeText>
+                <CarNameSizeText style={{textAlign:'center'}}>{selectedItemData.model}</CarNameSizeText>
                 </>
             })()}
         </View>
@@ -39,24 +37,15 @@ export function TechnicalDetails({navigation}) {
         <View >
             {/* <NormalSizeText style={{padding:5}}>Placa: {selectedItemData.license_plate}</NormalSizeText> */}
             {/* <NormalSizeText style={{padding:5}}>Data de aquisicao: {selectedItemData.aquisition_date}</NormalSizeText> */}
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Anos de Producao: {selectedItemData.years_of_production}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Cor: {selectedItemData.color}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Torque: {selectedItemData.torque}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Potencia: {selectedItemData.base_power}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Aceleracao (0-100km/h): {selectedItemData.acceleration}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Tracao: {selectedItemData.wheel}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Combustivel: {selectedItemData.base_power}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Velocidade Maxima: {selectedItemData.max_speed}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Transmissao: {selectedItemData.transmission}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Numero de portas: {selectedItemData.doors}</NormalSizeText>
-            <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Numero de assentos: {selectedItemData.seats}</NormalSizeText>
+            {/* <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Cor: {selectedItemData.color}</NormalSizeText> */}
+            
         </View>
         <Tubes width={'100%'}></Tubes>
         <View style={{marginVertical:'5%'}}>
             <CarNameSizeText style={{textAlign:'center',marginBottom:'10%'}}>Manutencao preventiva</CarNameSizeText>
             <View  style={{alignSelf:'center'}}>
             <TouchableOpacity>
-                <View style={[styles.selectButton,{backgroundColor:'black'}]}>
+                <View style={[styles.maintenanceButton,{backgroundColor:'black'}]}>
                     <NormalSizeText style={{color:'white'}}>+</NormalSizeText>
                 </View>
             </TouchableOpacity>
@@ -67,7 +56,7 @@ export function TechnicalDetails({navigation}) {
             <CarNameSizeText style={{textAlign:'center',marginBottom:'10%'}}>Consertos e aprimoramentos</CarNameSizeText>
             <View  style={{alignSelf:'center'}}>
             <TouchableOpacity>
-                <View style={[styles.selectButton,{backgroundColor:'black'}]}>
+                <View style={[styles.maintenanceButton,{backgroundColor:'black'}]}>
                     <NormalSizeText style={{color:'white'}}>+</NormalSizeText>
                 </View>
             </TouchableOpacity>
@@ -78,7 +67,7 @@ export function TechnicalDetails({navigation}) {
             <CarNameSizeText style={{textAlign:'center',marginBottom:'10%'}}>Licenciamentos</CarNameSizeText>
             <View  style={{alignSelf:'center'}}>
             <TouchableOpacity>
-                <View style={[styles.selectButton,{backgroundColor:'black'}]}>
+                <View style={[styles.maintenanceButton,{backgroundColor:'black'}]}>
                     <NormalSizeText style={{color:'white'}}>+</NormalSizeText>
                 </View>
             </TouchableOpacity>
@@ -90,14 +79,13 @@ export function TechnicalDetails({navigation}) {
         </View>
         <View style={{width:'100%'}}>
             <RedRoundButton style={{margin:'2%'}}>
-                <NormalSizeText style={{margin:'4%'}}>EMITIR</NormalSizeText>
+                <NormalSizeText style={{margin:'4%',color:'white'}}>EMITIR</NormalSizeText>
             </RedRoundButton>
             <RedRoundButton style={{margin:'2%'}}>
-                <NormalSizeText style={{margin:'4%'}}>EXPORTAR INFO DO CARRO</NormalSizeText>
+                <NormalSizeText style={{margin:'4%',color:'white'}}>EXPORTAR INFO DO CARRO</NormalSizeText>
             </RedRoundButton>
         </View>
     </View>
-    </>
 
 
 
