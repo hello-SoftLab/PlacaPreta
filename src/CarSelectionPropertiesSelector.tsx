@@ -10,9 +10,10 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Tubes from './tubes';
 import { useNavigation } from "@react-navigation/native";
+import { PopupCard } from "./PopupCard";
 
 interface Props {
-    visible:Boolean,
+    visible:boolean,
     carID:number,
     onGoBack?: () => void
 }
@@ -20,65 +21,41 @@ interface Props {
 
 export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) => {
 
-    const position = useSharedValue(+Window.height);
-    const width = useSharedValue(0);
+    const position = useSharedValue(0);
     const [currentIndex,setIndex] = useState(0);
-    const height = useSharedValue(0);
-    const backGroundWidth = useSharedValue(0);
-    const backGroundHeight = useSharedValue(0);
     const bgOpacity = useSharedValue(0);
     const db = useContext(DBContext).garageDB
     const [onConfirm,setOnConfirm] = useState(() => () => {})
     const [confirmText,setConfirmText] = useState('');
     const navigation = useNavigation();
 
-    
-
-    const onQuit = (finished) => {
-        if(finished){
-            width.value = 0;
-            height.value = 0;
-            backGroundWidth.value = 0;
-            backGroundHeight.value = 0;
+    const style = useAnimatedStyle(() => {
+        return {
+            left:position.value
         }
-    }
+    })
 
     const onFirstEnter = () => {
-        width.value = Window.width/1.2;
-        height.value = Window.height/1.35;
-        backGroundWidth.value = Window.width;
-        backGroundHeight.value = Window.height;
-
-        const func = (finished) => {
-            if(finished) {
-                selectPosition.value = withTiming(-Window.height/15,{duration:500});
-                selectOpacity.value = withTiming(1,{duration:500});
-            }
-        }
-
-        bgOpacity.value = withTiming(1,{duration:500},(finished) => runOnJS(func)(finished));
-        position.value = withTiming(0,{duration:500});
+        selectPosition.value = withTiming(Window.height/15,{duration:500});
+        selectOpacity.value = withTiming(1,{duration:500});
+        
     }
 
     const onPageExit = () => {
         selectPosition.value = withTiming(-Window.height/4,{duration:500});
         selectOpacity.value = withTiming(0,{duration:500});
-        bgOpacity.value = withTiming(0,{duration:800},(finished) => runOnJS(onQuit)(finished));
-        position.value = withTiming(+Window.width,{duration:500});
     }
 
     const onPastPage = () => {
         const func = (finished) => {
             if(finished){
-                if(currentIndex != 3){
-                    setIndex(currentIndex - 1);
-                    position.value = -Window.width
-                    position.value = withTiming(0,{duration:500});
-                    onFirstEnter();
-                }
+                setIndex(currentIndex - 1);
+                position.value = -Window.width
+                position.value = withTiming(0,{duration:500});
+                onFirstEnter();
             }
         }
-
+        onPageExit();
         position.value = withTiming(+Window.width,{duration:500},(finished) => runOnJS(func)(finished));
     }
 
@@ -89,11 +66,12 @@ export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) 
                 if(currentIndex != 3){
                     setIndex(currentIndex + 1);
                     position.value = +Window.width
+                    position.value = withTiming(0,{duration:500})
                     onFirstEnter();
                 }
             }
         }
-
+        onPageExit();
         position.value = withTiming(-Window.width,{duration:500},(finished) => runOnJS(func)(finished));
     }
 
@@ -106,24 +84,6 @@ export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) 
             onPageExit();
         }
     },[visible]);
-
-    const style = useAnimatedStyle(() => {
-        return {
-            top:Window.height/8,
-            left:position.value,
-            width:width.value,
-            height:height.value
-        }
-    })
-
-    const bgStyle = useAnimatedStyle(() => {
-        return {
-            opacity:bgOpacity.value,
-            width:backGroundWidth.value,
-            height:backGroundHeight.value,
-            backgroundColor:'black'
-        }
-    })
 
     const selectOpacity = useSharedValue(0);
     const selectPosition = useSharedValue(-Window.height/10);
@@ -228,7 +188,7 @@ export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) 
         <View style={{flex:0.2}}>
         </View>
         <View style={{flex:0.2,alignItems:'center'}}>
-            <Tubes width={'92%'} height={'100%'} scaleY={1.3} color={AppColors.black}></Tubes>
+            <Tubes width={'92%'} scaleY={1.3} color={AppColors.black}></Tubes>
         </View>
         <View style={{flexDirection:'row',flex:0.37,justifyContent:'center',alignItems:'flex-end'}}>
             <TouchableOpacity style={{zIndex:0}} onPress={onNextPage}>
@@ -261,17 +221,33 @@ export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) 
         </>
     }
 
+    const selectRender = () => {
+        return <Animated.View style={[{position:'absolute',alignSelf:'center'},selectStyle]}>
+        <TouchableOpacity style={{alignSelf:'center',alignItems:'center'}} onPress={() => {
+            if(currentIndex != 3){
+                onNextPage();
+                return;
+            }
+            if(onConfirm){
+                onConfirm();
+            }
+            
+        }}>
+                <Animated.View style={[styles.selectButton,{backgroundColor:'white'}]}> 
+                    <Text style={{fontFamily:AppConstants.fontFE}}>{confirmText}</Text>
+                </Animated.View>
+            </TouchableOpacity>
+        </Animated.View>
+    }
 
 
-    return <Animated.View style={[bgStyle,{position:'absolute'}]}>
-        <Animated.View style={[style,{zIndex:30,borderRadius:15,alignSelf:'center',backgroundColor:AppColors.yellow,borderWidth:1}]}>
+    return <PopupCard backGroundRender={selectRender()} posRelation="right" initialPos={-Window.width} finalPos={0} contentContainerStyle={{backgroundColor:'black',height:'65%'}} scrollable={false} visible={visible}>
+            <Animated.View style={[{flex:1,backgroundColor:AppColors.yellow,borderRadius:15},style]}>
             <View style={{flexDirection:'row',flex:0.2}}>
                 <View style={{flex:1}}>
                     <View style={{position:'absolute'}}>
                     <TouchableOpacity onPress={() => {
                         if(currentIndex == 0){
-                            bgOpacity.value = withTiming(0,{duration:500},(finished) => runOnJS(onQuit)(finished));
-                            position.value = withTiming(+Window.width,{duration:500});
                             if(onGoBack){
                                 onGoBack();
                             }
@@ -303,15 +279,9 @@ export const CarSelectionPropertiesSelector = ({visible,carID,onGoBack}: Props) 
             {(currentIndex == 1) &&  secondScreen()}
             {currentIndex == 2 && thirdScreen()}
             {currentIndex == 3 && fourthScreen()}
-            <Animated.View style={[{position:'absolute',alignSelf:'center'},selectStyle]}>
-                    <TouchableOpacity style={{alignSelf:'center',alignItems:'center',zIndex:0}} onPress={onConfirm}>
-                        <Animated.View style={[styles.selectButton,{backgroundColor:'white'}]}> 
-                            <Text style={{fontFamily:AppConstants.fontFE}}>{confirmText}</Text>
-                        </Animated.View>
-                    </TouchableOpacity>
+            
             </Animated.View>
-        </Animated.View>
-</Animated.View>
+    </PopupCard>
     
 
 

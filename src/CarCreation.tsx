@@ -129,57 +129,7 @@ export const CarCreation = ({navigation}) => {
         setModalVisibility(false);
     }
 
-    const cardRenderItem = () => {
-
-        const [year,setYear] = useState('');
-        const [name,setName] = useState('');
-        const [modelInformation,setModelInformation] = useState({});
-        
-        useEffect(() => {
-            db.readTransaction(tx => {
-                tx.executeSql("SELECT * FROM all_cars WHERE model=?",[selected],(tx,result) => {
-                    if(result.rows.length != 0){
-                        const obj = result.rows._array[0];
-                        setYear(obj['Ano'])
-                        setName(obj['model'])
-                        const {id,ano,model, ...rest} = obj;
-                        const modelData = {};
-                        for(const key of Object.keys(rest)){
-                            if(rest[key] != null){
-                                modelData[key] = rest[key]
-                            } 
-                        }    
-                        setModelInformation(modelData);
-                        console.log(`result model => ${result.rows._array[0].model}`)
-                    }
-                },(tx,err) => {
-                    console.log(err);
-                    return false;
-                })
-            })
-        },[selected])
-
-
-        return <>
-            <View style={{alignItems:'center'}}>
-                <Text style={{fontSize:AppConstants.yearSize,fontFamily:AppConstants.fontFE,marginBottom:10,marginTop:24}}>{year}</Text>
-                <Text style={{fontSize:AppConstants.nameSize + 2,fontFamily:AppConstants.fontFE,textAlign:'center'}}>{name}</Text>
-                <Tubes width={'92%'} scaleY={1.3}></Tubes>
-            </View>
-            <View style={{width:'92%',alignSelf:'center'}}>
-                {Object.keys(modelInformation).map((key,index) => {
-                    return <View key={"MainView" + index} style={{flexDirection:'row'}}>
-                        <View key={'leftMinorView' + index} style={{flex:0.5}}>
-                            <NormalSizeText style={{marginVertical:10,lineHeight:30}} key={index}>{key}: </NormalSizeText>
-                        </View>
-                        <View key={'rightMinorView' + index} style={{flex:0.5,alignItems:'center',justifyContent:'center'}}>
-                        <NormalSizeText style={{marginVertical:10,lineHeight:30,fontFamily:AppConstants.fontInter,fontSize:AppConstants.normalSize-2}} key={index + key}>{modelInformation[key]}</NormalSizeText>
-                        </View>
-                    </View>
-                })}
-            </View>
-        </>
-    }
+    
 
     const onPressStyle = useAnimatedStyle(() => {
         return {
@@ -205,12 +155,14 @@ export const CarCreation = ({navigation}) => {
                     </Animated.View>
                 </Pressable>
             </Animated.View>
-            <CarSelectionPropertiesView renderItem={cardRenderItem()} visible={modalVisible} onLeave={onLeave} onConfirm={() => {
+            <CarSelectionPropertiesView modelName={selected} canSelect={true} visible={modalVisible} onLeave={onLeave} onConfirm={() => {
                 setCustomizationVisibility(true);
-            }}></CarSelectionPropertiesView>
-            <CarSelectionPropertiesSelector carID={insertedCarID.value} onGoBack={() => {
+            }}>
+                <CarSelectionPropertiesSelector carID={insertedCarID.value} onGoBack={() => {
                 setCustomizationVisibility(false);
-            }} visible={customizationVisibility}></CarSelectionPropertiesSelector>
+                }} visible={customizationVisibility}></CarSelectionPropertiesSelector>
+            </CarSelectionPropertiesView>
+            
     
     </GestureHandlerRootView>
 }

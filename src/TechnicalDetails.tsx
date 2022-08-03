@@ -10,6 +10,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Tubes from './tubes'
 import { PopupCard } from "./PopupCard";
 import { ConsertosEAprimoramentos } from "./ConsertosEAprimoramentos";
+import { CarSelectionPropertiesView } from "./CarSelectionPropertiesView";
 
 export function TechnicalDetails({navigation}) {
 
@@ -18,7 +19,7 @@ export function TechnicalDetails({navigation}) {
     const [activeSections,setActiveSections] = useState([]);
     const [manutencaoPreventiva,setManutencaoPreventiva] = useState(false);
     const [consertos,setConsertos] = useState(false);
-
+    const [showInfo,setShowInfo] = useState(false);
     
 
 
@@ -38,11 +39,12 @@ export function TechnicalDetails({navigation}) {
             <Text>IMAGEM</Text>
         </View>
         <Tubes width={'100%'}></Tubes>
-        <View >
-            {/* <NormalSizeText style={{padding:5}}>Placa: {selectedItemData.license_plate}</NormalSizeText> */}
-            {/* <NormalSizeText style={{padding:5}}>Data de aquisicao: {selectedItemData.aquisition_date}</NormalSizeText> */}
-            {/* <NormalSizeText style={{paddingVertical:10,textAlign:'left'}}>Cor: {selectedItemData.color}</NormalSizeText> */}
-            
+        <View style={{marginVertical:'5%'}}>
+            <RedRoundButton onPress={() => {
+                setShowInfo(true);
+            }}>
+                <NormalSizeText style={{margin:'4%',color:AppColors.white}}>Info do modelo</NormalSizeText>
+            </RedRoundButton>
         </View>
         <Tubes width={'100%'}></Tubes>
         <View style={{marginVertical:'5%'}}>
@@ -95,11 +97,14 @@ export function TechnicalDetails({navigation}) {
         <PopupCard visible={manutencaoPreventiva}>
 
         </PopupCard>
-        <PopupCard paddingBottom={Window.height/20} contentContainerStyle={{borderRadius:15}} backOpacity={0.3} width={Window.width/1.3} visible={consertos} onExit={() => {
+        <PopupCard paddingBottom={Window.height/20} contentContainerStyle={{borderRadius:15,backgroundColor:'#383838'}} backOpacity={0.3} width={Window.width/1.3} visible={consertos} onExit={() => {
             setConsertos(false);
         }}>
             <ConsertosEAprimoramentos></ConsertosEAprimoramentos>
         </PopupCard>
+        <CarSelectionPropertiesView modelName={selectedItemData.model} canSelect={false} visible={showInfo} onLeave={() => {
+            setShowInfo(false);
+        }} ></CarSelectionPropertiesView>
         
     </View>
 

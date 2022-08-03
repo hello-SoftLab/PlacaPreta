@@ -1,7 +1,7 @@
 import { Database } from "expo-sqlite";
 import React, { createContext } from "react";
 import { Dimensions, StyleSheet, TextStyle, View } from "react-native";
-import { SharedValue, useSharedValue } from "react-native-reanimated";
+import Animated, { SharedValue, useSharedValue } from "react-native-reanimated";
 import { ICarouselInstance } from "react-native-reanimated-carousel";
 import { Text } from "react-native-elements";
 import { StyleProp } from "react-native";
@@ -76,7 +76,8 @@ interface TextInterface {
 
 interface ButtonInterface {
     style?: StyleProp<TextStyle>,
-    children?:React.ReactNode
+    children?:React.ReactNode,
+    onPress?: () => void
 }
 
 export const NormalSizeText = ({children,style} : TextInterface) => {
@@ -90,10 +91,10 @@ export const CarNameSizeText = ({children,style} : TextInterface) => {
     return <Text style={[{fontFamily:AppConstants.fontFE,fontSize:AppConstants.cardAliasSize},style]}>{children}</Text>
 }
 
-export const RedRoundButton = ({children,style} : ButtonInterface) => {
-    return <TouchableOpacity>
-            <View style={[{alignItems:'center',backgroundColor:AppColors.red,borderRadius:7},style]}>
+export const RedRoundButton = ({children,onPress,style} : ButtonInterface) => {
+    return <TouchableOpacity onPress={onPress}>
+            <Animated.View style={[{alignItems:'center',justifyContent:'center',backgroundColor:AppColors.red,borderRadius:7},style]}>
                 {children}
-            </View>
+            </Animated.View>
         </TouchableOpacity>
 }

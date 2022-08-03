@@ -62,12 +62,19 @@ function AnimatedSplashScreen({children,image}) {
             finally {
                 if(isSplashAnimationComplete){
                     setAppReady(true);
-                    await SplashScreen.hideAsync();
+                    
                 }
             }
           }
         
-    }, [isAppReady,isSplashAnimationComplete]);
+    }, [isSplashAnimationComplete]);
+
+    useEffect(() => {
+        if(isAppReady){
+            SplashScreen.hideAsync();
+        }
+    },[isAppReady])
+
     
     const onAnimationEnd = (finished? : Boolean) => {
         setAnimationComplete(true);
