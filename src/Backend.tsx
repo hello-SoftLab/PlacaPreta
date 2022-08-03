@@ -13,7 +13,6 @@ export const InitDBContext = () => {
 
 
     const statements = [
-        `DROP TABLE IF EXISTS cars`,
       `CREATE TABLE IF NOT EXISTS cars (
             id int,
             model TEXT,

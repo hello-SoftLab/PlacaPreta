@@ -8,12 +8,16 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import { useNavigation } from "@react-navigation/native";
 import Accordion from 'react-native-collapsible/Accordion';
 import Tubes from './tubes'
+import { PopupCard } from "./PopupCard";
+import { ConsertosEAprimoramentos } from "./ConsertosEAprimoramentos";
 
 export function TechnicalDetails({navigation}) {
 
     const selectedItemData = useContext(GarageContext).selectedCarProperties;
     const isCollapsed = useSharedValue(true);
     const [activeSections,setActiveSections] = useState([]);
+    const [manutencaoPreventiva,setManutencaoPreventiva] = useState(false);
+    const [consertos,setConsertos] = useState(false);
 
     
 
@@ -55,7 +59,9 @@ export function TechnicalDetails({navigation}) {
         <View style={{marginVertical:'5%'}}>
             <CarNameSizeText style={{textAlign:'center',marginBottom:'10%'}}>Consertos e aprimoramentos</CarNameSizeText>
             <View  style={{alignSelf:'center'}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                setConsertos(true);
+            }}>
                 <View style={[styles.maintenanceButton,{backgroundColor:'black'}]}>
                     <NormalSizeText style={{color:'white'}}>+</NormalSizeText>
                 </View>
@@ -85,6 +91,16 @@ export function TechnicalDetails({navigation}) {
                 <NormalSizeText style={{margin:'4%',color:'white'}}>EXPORTAR INFO DO CARRO</NormalSizeText>
             </RedRoundButton>
         </View>
+        {/* Popups! */}
+        <PopupCard visible={manutencaoPreventiva}>
+
+        </PopupCard>
+        <PopupCard paddingBottom={Window.height/20} contentContainerStyle={{borderRadius:15}} backOpacity={0.3} width={Window.width/1.3} visible={consertos} onExit={() => {
+            setConsertos(false);
+        }}>
+            <ConsertosEAprimoramentos></ConsertosEAprimoramentos>
+        </PopupCard>
+        
     </View>
 
 

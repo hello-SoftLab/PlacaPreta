@@ -61,8 +61,8 @@ function AnimatedSplashScreen({children,image}) {
             }
             finally {
                 if(isSplashAnimationComplete){
-                    await SplashScreen.hideAsync();
                     setAppReady(true);
+                    await SplashScreen.hideAsync();
                 }
             }
           }

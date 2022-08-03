@@ -1,5 +1,5 @@
 import * as React from "react"
-import { View } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import Svg, { Defs, G, Path } from "react-native-svg"
 import { AppColors } from "./Styles"
 /* SVGR has dropped some elements not supported by react-native-svg: style */
@@ -9,11 +9,12 @@ interface TubeProps {
   width?:number | string,
   spacing?:number | string,
   scaleY?: number,
-  color?: string
+  color?: string,
+  style?: StyleProp<ViewStyle>
 }
 
 const SvgComponent = (props : TubeProps) => (
-  <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 493.36 57.72" width={props.width? props.width : '100%'} height={props.spacing? props.spacing : 50}>
+  <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 493.36 57.72" style={props.style} width={props.width? props.width : '100%'} height={props.spacing? props.spacing : 50}>
     <Defs></Defs>
     <G id="Camada_2" data-name="Camada 2">
       <G id="Camada_2-2" data-name="Camada 2" stroke={props.color? props.color : AppColors.yellow} strokeWidth={10} scaleY={props.scaleY? props.scaleY : 1.2} >

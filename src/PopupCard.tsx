@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Dimensions, StyleProp, ViewStyle } from "react-native";
+import { Dimensions, Modal, StyleProp, ViewStyle } from "react-native";
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, View } from "react-native";
 import Animated, { AnimatedStyleProp, max, measure, runOnJS, runOnUI, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { AppColors} from "./Styles";
@@ -13,7 +13,7 @@ const Window = {
 
 
 interface PopupCardProps {
-    visible: Boolean,
+    visible: boolean,
     onScroll?: ((event: NativeSyntheticEvent<NativeScrollEvent>) => void) | Animated.Node<(event: NativeSyntheticEvent<NativeScrollEvent>) => void>,
     children?: React.ReactNode,
     initialPos?: number,
@@ -25,12 +25,13 @@ interface PopupCardProps {
     paddingBottom?: number | string,
     scrollable?: boolean,
     bgColor?: string,
-    backOpacity: number,
+    backOpacity?: number,
+    contentContainerStyle?: StyleProp<ViewStyle>
 
 }
 
 
-export const PopupCard = ({backOpacity,bgColor,scrollable,visible,children,onScroll,initialPos,finalPos,posRelation,onExit,paddingBottom,paddingTop,width} : PopupCardProps) => {
+export const PopupCard = ({contentContainerStyle,backOpacity,bgColor,scrollable,visible,children,onScroll,initialPos,finalPos,posRelation,onExit,paddingBottom,paddingTop,width} : PopupCardProps) => {
     const position = useSharedValue(initialPos? initialPos : -Window.height);
     const height = useSharedValue(0);
     const calculatedHeight = useSharedValue(0);
@@ -84,7 +85,7 @@ export const PopupCard = ({backOpacity,bgColor,scrollable,visible,children,onScr
 
 
         position.value = withTiming(initialPos? initialPos : -Window.height,{duration:500});
-        bgOpacity.value = withTiming(backOpacity? backOpacity : 0,{duration:800},(finished) => runOnJS(func)(finished));
+        bgOpacity.value = withTiming(0,{duration:800},(finished) => runOnJS(func)(finished));
     }
 
     const onChange = () => {
@@ -108,7 +109,7 @@ export const PopupCard = ({backOpacity,bgColor,scrollable,visible,children,onScr
         if(visible){
             backGroundWidth.value = Window.width;
             backGroundHeight.value = Window.height;
-            bgOpacity.value = withTiming(1,{duration:500});
+            bgOpacity.value = withTiming(backOpacity? 1- backOpacity : 1,{duration:500});
             position.value = withTiming(finalPos? finalPos : 0,{duration:500});
         }
         else {
@@ -118,14 +119,16 @@ export const PopupCard = ({backOpacity,bgColor,scrollable,visible,children,onScr
 
 
     return <>
+    <Modal visible={visible} transparent={true}>
     <Animated.View style={[bgStyle,{position:'absolute'}]}>
-        <Animated.ScrollView contentContainerStyle={{flexGrow:1}}  onScroll={onScroll? onScroll : gestureHandler} scrollEventThrottle={1.2} style={[scrollStyle]} showsVerticalScrollIndicator={false}>
-            <View style={{height:paddingTop? paddingTop: Window.height/6}}></View>
-            <Animated.View ref={viewRef} style={[style,{borderRadius:15,alignSelf:'center',justifyContent:'center',backgroundColor:bgColor? bgColor : 'white',borderWidth:1}]}>
-                        {children}
-            </Animated.View>
-            <View style={{height:paddingBottom? paddingBottom : Window.height/3}}></View>
-        </Animated.ScrollView>
     </Animated.View>
+    <Animated.ScrollView contentContainerStyle={{flexGrow:1}}  onScroll={onScroll? onScroll : gestureHandler} scrollEventThrottle={1.2} style={[scrollStyle]} showsVerticalScrollIndicator={false}>
+        <View style={{height:paddingTop? paddingTop: Window.height/6}}></View>
+        <Animated.View ref={viewRef} style={[style,{alignSelf:'center',justifyContent:'center',backgroundColor:'white'},contentContainerStyle]}>
+                    {children}
+        </Animated.View>
+        <View style={{height:paddingBottom? paddingBottom : Window.height/3}}></View>
+    </Animated.ScrollView>
+    </Modal>
     </>
 }

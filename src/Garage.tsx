@@ -110,7 +110,7 @@ export const Garage = () => {
             </Animated.View>
         </GestureDetector>
     </Animated.View>
-    <PopupCard visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}>
+    <PopupCard contentContainerStyle={{borderRadius:15}} visible={isCardPopupVisible} onExit={() => setCardPopupVisibility(false)}>
         {isCardPopupVisible && <TechnicalDetails navigation={navigation}></TechnicalDetails>}
     </PopupCard>
     </GestureHandlerRootView> 

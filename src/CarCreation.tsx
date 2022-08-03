@@ -172,7 +172,7 @@ export const CarCreation = ({navigation}) => {
                         <View key={'leftMinorView' + index} style={{flex:0.5}}>
                             <NormalSizeText style={{marginVertical:10,lineHeight:30}} key={index}>{key}: </NormalSizeText>
                         </View>
-                        <View key={'rightMinorView' + index} style={{flex:0.5}}>
+                        <View key={'rightMinorView' + index} style={{flex:0.5,alignItems:'center',justifyContent:'center'}}>
                         <NormalSizeText style={{marginVertical:10,lineHeight:30,fontFamily:AppConstants.fontInter,fontSize:AppConstants.normalSize-2}} key={index + key}>{modelInformation[key]}</NormalSizeText>
                         </View>
                     </View>
