@@ -35,7 +35,6 @@ function AnimatedSplashScreen({children,image}) {
             animationVar.value = withTiming(0,{duration:2000},(finished) => runOnJS(onAnimationEnd)(finished))
         }
     },[isFirstAnimationComplete])
-
     useEffect(() => {
         if(!isAppReady){
             animationVar.value = withTiming(1,{duration:2000},finished => runOnJS(func)(finished))

@@ -5,7 +5,7 @@ import Animated, { SharedValue, useSharedValue } from "react-native-reanimated";
 import { ICarouselInstance } from "react-native-reanimated-carousel";
 import { Text } from "react-native-elements";
 import { StyleProp } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 
 export const Window = {
     width: Dimensions.get("window").width,

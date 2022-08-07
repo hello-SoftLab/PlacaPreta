@@ -1,14 +1,14 @@
 import { View,Text, Pressable, Button } from "react-native"
-import { AnimationsContext, GarageContext, styles, Window } from "./Styles"
+import { AnimationsContext, GarageContext, styles, Window } from "../Styles"
 import Carousel from 'react-native-reanimated-carousel';
 import Card from "./Card";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { DBContext, InitAllCarsDB, InitDBContext } from "./Backend";
+import { DBContext, InitAllCarsDB, InitDBContext } from "../Backend";
 import Animated, { useSharedValue, withTiming,SlideInDown, useAnimatedStyle, modulo, interpolate } from "react-native-reanimated";
 import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHandler } from "react-native-gesture-handler";
 import { Navigation } from "react-native-navigation";
 import { useNavigation } from "@react-navigation/native";
-import { PopupCard } from "./PopupCard";
+import { PopupCard } from "../Components/PopupCard";
 import { TechnicalDetails } from "./TechnicalDetails";
 
 

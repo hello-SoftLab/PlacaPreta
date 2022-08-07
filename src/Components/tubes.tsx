@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import Svg, { Defs, G, Path } from "react-native-svg"
-import { AppColors } from "./Styles"
+import { AppColors } from "../Styles"
 /* SVGR has dropped some elements not supported by react-native-svg: style */
 
 

@@ -39,6 +39,7 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.3.0",
     "react-native-svg-transformer": "^1.0.0",
+    "react-native-swipe-gestures": "^1.0.5",
     "react-native-web": "0.17.7",
     "reanimated-color-picker": "^1.0.0"
   },

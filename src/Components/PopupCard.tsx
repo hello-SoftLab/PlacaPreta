@@ -127,7 +127,7 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
     <Modal visible={modalVisible} transparent={true}>
     <Animated.View style={[bgStyle,{position:'absolute',zIndex:-1}]}>
     </Animated.View>
-    <Animated.ScrollView scrollEnabled={scrollable?.valueOf() == null || scrollable?.valueOf() == undefined? true : scrollable} contentContainerStyle={{flexGrow:1,zIndex:-1}}  onScroll={onScroll? onScroll : gestureHandler} scrollEventThrottle={1.2} style={[scrollStyle]} showsVerticalScrollIndicator={false}>
+    <Animated.ScrollView bounces={true} scrollEnabled={scrollable?.valueOf() == null || scrollable?.valueOf() == undefined? true : scrollable} contentContainerStyle={{flexGrow:1,zIndex:-1}}  onScroll={onScroll? onScroll : gestureHandler} scrollEventThrottle={1.2} style={[scrollStyle]} showsVerticalScrollIndicator={false}>
         <View style={{height:paddingTop? paddingTop: Window.height/6,zIndex:-1}}></View>
         <Animated.View ref={viewRef} style={[style,{alignSelf:'center',justifyContent:'center',backgroundColor:'white'},contentContainerStyle]}>
             {children}

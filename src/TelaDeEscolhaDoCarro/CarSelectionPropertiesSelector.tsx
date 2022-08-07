@@ -1,16 +1,16 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Pressable, View,Text } from "react-native";
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { AppColors, AppConstants, styles, Window } from "./Styles";
+import { AppColors, AppConstants, styles, Window } from "../Styles";
 import { Pagination } from 'react-native-snap-carousel';
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import ColorPicker , {BrightnessSlider, OpacitySlider, Panel3, Preview} from "reanimated-color-picker";
-import { DBContext } from "./Backend";
+import { DBContext } from "../Backend";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import Tubes from './tubes';
+import Tubes from '../Components/tubes';
 import { useNavigation } from "@react-navigation/native";
-import { PopupCard } from "./PopupCard";
+import { PopupCard } from "../Components/PopupCard";
 
 interface Props {
     visible:boolean,

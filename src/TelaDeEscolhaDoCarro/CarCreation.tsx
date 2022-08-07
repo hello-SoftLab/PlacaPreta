@@ -1,19 +1,19 @@
 import { NavigationProp } from "@react-navigation/native";
 import React, { createContext, useContext, useEffect, useState,useRef } from "react";
 import { View,Text, Keyboard, Pressable, Modal } from "react-native";
-import { styles,Window,AppColors, GarageContext, AppConstants, NormalSizeText } from "./Styles";
-import { DBContext, DBFunctions } from "./Backend";
+import { styles,Window,AppColors, GarageContext, AppConstants, NormalSizeText } from "../Styles";
+import { DBContext, DBFunctions } from "../Backend";
 import { SearchBar } from "@rneui/base";
 import { FlatList, GestureHandlerRootView, NativeViewGestureHandler, ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated,{acc, LightSpeedInLeft, runOnJS, useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
-import App from "../App";
+import App from "../../App";
 import {BlurView} from 'expo-blur';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Button, ListItem } from "react-native-elements";
 import { CarSelectionPropertiesView } from "./CarSelectionPropertiesView";
-import Tubes from './tubes';
+import Tubes from '../Components/tubes';
 import { CarSelectionPropertiesSelector } from "./CarSelectionPropertiesSelector";
-import { PopupCard } from "./PopupCard";
+import { PopupCard } from "../Components/PopupCard";
 
 // Item da escolha de carros (ex. Alpha romeo)
 const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,modalVisibleVal}) => {

@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
 import Animated, { Extrapolate, interpolate, useAnimatedStyle,SlideInDown, useSharedValue } from "react-native-reanimated";
-import { DBContext } from "./Backend";
-import { AppColors, AppConstants, CarNameSizeText, GarageContext, NormalSizeText, RedRoundButton, styles, Window, YearSizeText } from "./Styles";
+import { DBContext } from "../Backend";
+import { AppColors, AppConstants, CarNameSizeText, GarageContext, NormalSizeText, RedRoundButton, styles, Window, YearSizeText } from "../Styles";
 // will be fine
-import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import Accordion from 'react-native-collapsible/Accordion';
-import Tubes from './tubes'
-import { PopupCard } from "./PopupCard";
+import Tubes from '../Components/tubes'
+import { PopupCard } from "../Components/PopupCard";
 import { ConsertosEAprimoramentos } from "./ConsertosEAprimoramentos";
-import { CarSelectionPropertiesView } from "./CarSelectionPropertiesView";
+import { CarSelectionPropertiesView } from "../TelaDeEscolhaDoCarro/CarSelectionPropertiesView";
 
 export function TechnicalDetails({navigation}) {
 
@@ -35,6 +35,7 @@ export function TechnicalDetails({navigation}) {
                 </>
             })()}
         </View>
+        
         <View style={{borderWidth:1,height:'10%',alignItems:'center',justifyContent:'center'}}>
             <Text>IMAGEM</Text>
         </View>
@@ -95,7 +96,6 @@ export function TechnicalDetails({navigation}) {
         </View>
         {/* Popups! */}
         <PopupCard visible={manutencaoPreventiva}>
-
         </PopupCard>
         <PopupCard paddingBottom={Window.height/20} contentContainerStyle={{borderRadius:15,backgroundColor:'#383838'}} backOpacity={0.3} width={Window.width/1.3} visible={consertos} onExit={() => {
             setConsertos(false);

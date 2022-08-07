@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { View,Text, Pressable, Modal } from "react-native"
 import Animated, { runOnJS, useAnimatedGestureHandler, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { AppColors,AppConstants,NormalSizeText,styles,Window } from "./Styles";
+import { AppColors,AppConstants,NormalSizeText,styles,Window } from "../Styles";
 import { Gesture, GestureDetector, GestureHandlerRootView, NativeViewGestureHandler,PanGestureHandler, TapGestureHandler } from "react-native-gesture-handler";
 import { FullWindowOverlay } from "react-native-screens";
-import Tubes from './tubes'
-import { DBContext } from "./Backend";
-import { PopupCard } from "./PopupCard";
+import Tubes from '../Components/tubes'
+import { DBContext } from "../Backend";
+import { PopupCard } from "../Components/PopupCard";
 import { CarSelectionPropertiesSelector } from "./CarSelectionPropertiesSelector";
 
 interface SelectionInterface {
@@ -143,7 +143,7 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
 
     const gestureHandler = useAnimatedScrollHandler({
         onEndDrag: (event,ctx) => {
-            if(event.contentOffset.y < -Window.height/7){
+            if(event.contentOffset.y == 0 && event.velocity.y > 12){
                 runOnJS(onChange)();
             }
         },
