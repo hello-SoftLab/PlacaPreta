@@ -77,7 +77,8 @@ interface TextInterface {
 interface ButtonInterface {
     style?: StyleProp<TextStyle>,
     children?:React.ReactNode,
-    onPress?: () => void
+    onPress?: () => void,
+    disabled?: boolean
 }
 
 export const NormalSizeText = ({children,style} : TextInterface) => {
@@ -91,8 +92,8 @@ export const CarNameSizeText = ({children,style} : TextInterface) => {
     return <Text style={[{fontFamily:AppConstants.fontFE,fontSize:AppConstants.cardAliasSize},style]}>{children}</Text>
 }
 
-export const RedRoundButton = ({children,onPress,style} : ButtonInterface) => {
-    return <TouchableOpacity onPress={onPress}>
+export const RedRoundButton = ({children,onPress,style,disabled} : ButtonInterface) => {
+    return <TouchableOpacity disabled={disabled} onPress={onPress}>
             <Animated.View style={[{alignItems:'center',justifyContent:'center',backgroundColor:AppColors.red,borderRadius:7},style]}>
                 {children}
             </Animated.View>

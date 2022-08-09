@@ -161,7 +161,7 @@ export const ConsertosEAprimoramentos = () => {
         </RedRoundButton>
     </Animated.View>}
     {shouldShowAreaDoCarro && <Animated.View style={[{position:'absolute',alignSelf:'center'},areaDoCarroPositionStyle]}>
-        <RedRoundButton style={[{alignSelf:'center',justifyContent:'center',position:'absolute',backgroundColor:'#1E1E1E'},areaDoCarroStyle]}>
+        <RedRoundButton disabled={true} style={[{alignSelf:'center',justifyContent:'center',position:'absolute',backgroundColor:'#1E1E1E'},areaDoCarroStyle]}>
             <NormalSizeText style={{color:'white',marginHorizontal:40,marginVertical:10}}>Area do Carro</NormalSizeText>
         </RedRoundButton>
         </Animated.View>}

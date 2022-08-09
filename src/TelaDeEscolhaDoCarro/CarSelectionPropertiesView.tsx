@@ -29,31 +29,7 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
     const bgOpacity = useSharedValue(0);
     const selectOpacity = useSharedValue(0);
     const selectPosition = useSharedValue(-Window.height);
-    const lowestPoint = -Window.height/1.7;
-    const highestPoint = Window.height/2;
-
-    const style = useAnimatedStyle(() => {
-        return {
-            top:Window.height/5,
-            width:width.value,
-            height:height.value
-        }
-    })
-
-    const scrollStyle = useAnimatedStyle(() => {
-        return {
-            bottom:position.value
-        }
-    })
-
-    const bgStyle = useAnimatedStyle(() => {
-        return {
-            opacity:bgOpacity.value,
-            width:backGroundWidth.value,
-            height:backGroundHeight.value,
-            backgroundColor:'black'
-        }
-    })
+    
 
     const selectStyle = useAnimatedStyle(() => {
         return {
@@ -65,27 +41,6 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
         }
     })
 
-
-    const leaveMainWindow = () => {
-        const func = (finished) => {
-            if(finished){
-                width.value = 0;
-                height.value = 0;
-                backGroundWidth.value = 0;
-                backGroundHeight.value = 0;
-            }
-        }
-
-
-        position.value = withTiming(-Window.height,{duration:500});
-        bgOpacity.value = withTiming(0,{duration:800},(finished) => runOnJS(func)(finished));
-    }
-
-    const onChange = () => {
-        onLeave();
-
-        leaveMainWindow();        
-    }
 
     const cardRenderItem = () => {
 
@@ -141,13 +96,7 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
     }
     
 
-    const gestureHandler = useAnimatedScrollHandler({
-        onEndDrag: (event,ctx) => {
-            if(event.contentOffset.y == 0 && event.velocity.y > 12){
-                runOnJS(onChange)();
-            }
-        },
-        onScroll: (event, context) => {
+    const gestureHandler = (event) => {
             if(event.contentOffset.y > Window.height/7){
                 selectPosition.value = withTiming(Window.height/15,{duration:500});
                 selectOpacity.value = withTiming(1,{duration:500});
@@ -157,8 +106,7 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
                 selectOpacity.value = withTiming(0,{duration:500});
                 selectPosition.value = withTiming(-Window.height/5,{duration:500});
             }
-        },
-    })
+        }
 
     
     
@@ -171,9 +119,6 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
             backGroundHeight.value = Window.height;
             bgOpacity.value = withTiming(1,{duration:500});
             position.value = withTiming(0,{duration:500});
-        }
-        else {
-            leaveMainWindow();
         }
     },[visible])
 
@@ -193,7 +138,7 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
                 onConfirm();
             }
         }}>
-        <Animated.View style={[styles.selectButton,selectStyle]}> 
+        <Animated.View style={[styles.selectButton,selectStyle,{bottom:100}]}> 
             <Text style={{fontFamily:AppConstants.fontFE}}>Adicionar</Text>
         </Animated.View>
         </Pressable>
