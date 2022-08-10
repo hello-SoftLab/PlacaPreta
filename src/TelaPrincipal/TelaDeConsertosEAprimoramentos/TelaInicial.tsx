@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { View } from "react-native"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { AppColors, NormalSizeText, RedRoundButton, Window } from "../../Styles"
+import { DBContext } from "../../Backend"
+import { AppColors, GarageContext, NormalSizeText, RedRoundButton, Window } from "../../Styles"
 import { AreaDoCarro } from "./AreaDoCarro"
 import { TelaDeDescricao } from "./TelaDeDescricao"
 
@@ -26,7 +27,8 @@ export const TelaInicial = ({onFinish}: TelaInicialProps) => {
     const [shouldShowAreaDoCarro,setShowAreaDoCarro] = useState(false);
     const [descriptionScreenText,setDescriptionScreenText] = useState('');
     const [shouldShowDescScreen,setShowDescScreen] = useState(false);
-    
+    const carID = useContext(GarageContext).selectedCarProperties.id;
+    const db = useContext(DBContext).garageDB;
 
     const consertoStyle = useAnimatedStyle(() => {
         return {
@@ -115,7 +117,20 @@ export const TelaInicial = ({onFinish}: TelaInicialProps) => {
         setShowDescScreen(true);
         setShowAreaDoCarro(false);
     }} visible={(shouldShowAreaDoCarro)}></AreaDoCarro>
-    <TelaDeDescricao visible={shouldShowDescScreen} areaName={descriptionScreenText} onFinish={() => {
+    <TelaDeDescricao visible={shouldShowDescScreen} areaName={descriptionScreenText} onFinish={(description) => {
+        db.transaction(tx => {
+            tx.executeSql(`INSERT INTO consertos_e_aprimoramentos (car_id,type,description) VALUES (?,?,?)`,[
+                carID,
+                choices[selectedChoice],
+                description
+            ],(tx,result) => {
+                console.log('written to consertos e aprimoramentos!')
+            },(tx,err) => {
+                console.log(err.message);
+                return false;
+            })
+        })
+
         if(onFinish) {
             onFinish();
         }

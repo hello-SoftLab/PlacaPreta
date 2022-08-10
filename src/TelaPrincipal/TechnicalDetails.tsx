@@ -12,6 +12,9 @@ import { PopupCard } from "../Components/PopupCard";
 import { ConsertosEAprimoramentos } from "./TelaDeConsertosEAprimoramentos/ConsertosEAprimoramentos";
 import { CarSelectionPropertiesView } from "../TelaDeEscolhaDoCarro/CarSelectionPropertiesView";
 
+
+
+
 export function TechnicalDetails({navigation}) {
 
     const selectedItemData = useContext(GarageContext).selectedCarProperties;

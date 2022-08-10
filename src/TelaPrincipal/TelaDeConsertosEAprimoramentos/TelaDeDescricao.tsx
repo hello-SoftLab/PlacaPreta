@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { ScrollView, View } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { NormalSizeText, RedRoundButton, Window } from "../../Styles"
+import { DBContext } from "../../Backend"
+import { GarageContext, NormalSizeText, RedRoundButton, Window } from "../../Styles"
 
 
 
@@ -13,7 +14,7 @@ interface TelaDeDescricaoProps {
     visible:boolean,
     areaName:string,
     onLeave?: () => void,
-    onFinish?: () => void,
+    onFinish?: (text:string) => void,
     onDidExit?: () => void
 }
 
@@ -24,6 +25,7 @@ export const TelaDeDescricao = ({visible,areaName,onLeave,onFinish,onDidExit}:Te
     const paddingBetween = useSharedValue(Window.height);
     const opacity = useSharedValue(0);
     const [shouldShow,setShouldShow] = useState(false);
+    const writtenText = useSharedValue('');
 
     const mainStyle = useAnimatedStyle(() => {
         return {
@@ -74,7 +76,9 @@ export const TelaDeDescricao = ({visible,areaName,onLeave,onFinish,onDidExit}:Te
         <NormalSizeText style={{color:'white',fontSize:12,paddingTop:'2%'}}>(peca, oficina, preco...)</NormalSizeText>
         <Animated.View style={spacingStyleTwo}></Animated.View>
         <ScrollView style={{borderRadius:15,width:'90%',height:Window.height/5,backgroundColor:'white'}}>
-            <TextInput onPressIn={() => {
+            <TextInput onChangeText={(text) => {
+                writtenText.value = text;
+            }} onPressIn={() => {
                 paddingBetween.value = withTiming(Window.height/80,{duration:800})
             }} onEndEditing={() => {
                 paddingBetween.value = withTiming(Window.height/20,{duration:800})
@@ -83,8 +87,9 @@ export const TelaDeDescricao = ({visible,areaName,onLeave,onFinish,onDidExit}:Te
         <NormalSizeText style={{color:'white',fontSize:12,paddingTop:'2%'}}>*opcional</NormalSizeText>
         <Animated.View style={spacingStyleThree}></Animated.View>
         <RedRoundButton onPress={() => {
+
             if(onFinish){
-                onFinish();
+                onFinish(writtenText.value);
             }
         }}>
             <NormalSizeText style={{margin:'4%',color:'white'}}>Pronto</NormalSizeText>

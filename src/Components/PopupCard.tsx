@@ -139,7 +139,6 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
     },[visible])
 
     useEffect(() => {
-        console.log(`modal visible? ${modalVisible}`)
     },[modalVisible])
 
     const headerHeight = useHeaderHeight();

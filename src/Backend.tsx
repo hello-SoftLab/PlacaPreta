@@ -21,6 +21,12 @@ export const InitDBContext = () => {
             aquisition_date,
             license_plate text,
             color text
+        )`,
+        `CREATE TABLE IF NOT EXISTS consertos_e_aprimoramentos (
+            type TEXT,
+            car_id int REFERENCES cars(id),
+            date TEXT,
+            description TEXT
         )`
     ]
 
