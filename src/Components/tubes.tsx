@@ -13,6 +13,8 @@ interface TubeProps {
   style?: StyleProp<ViewStyle>
 }
 
+export const TubesHeight = 493.36
+
 const SvgComponent = (props : TubeProps) => (
   <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 493.36 57.72" style={props.style} width={props.width? props.width : '100%'} height={props.spacing? props.spacing : 50}>
     <Defs></Defs>

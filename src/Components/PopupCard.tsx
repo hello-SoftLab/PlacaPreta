@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Platform,Dimensions, StyleProp, ViewStyle, PanResponder } from "react-native";
+import { Platform,Dimensions, StyleProp, ViewStyle, PanResponder, KeyboardAvoidingView, Keyboard } from "react-native";
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, View,Text,Modal } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView, PanGestureHandler } from "react-native-gesture-handler";
 import Animated, { AnimatedStyleProp, max, measure, runOnJS, runOnUI, useAnimatedGestureHandler, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming,scrollTo, useDerivedValue } from "react-native-reanimated";
 import { AppColors} from "../Styles";
-import { ConsertosEAprimoramentos } from "../TelaPrincipal/ConsertosEAprimoramentos";
+import { ConsertosEAprimoramentos } from "../TelaPrincipal/TelaDeConsertosEAprimoramentos/ConsertosEAprimoramentos";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 
 const Window = {
@@ -44,7 +45,18 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
     const currentOffset = useSharedValue(0);
     const lastPosition = useSharedValue(0);
     const currentAccumulatedDistance = useSharedValue(0);
+    const [isKeyboardShown,setKeyboardState] = useState(false);
     const scrollviewRef = useAnimatedRef<Animated.ScrollView>();
+
+    useState(() => {
+        Keyboard.addListener('keyboardDidShow',() => {
+            setKeyboardState(true);
+        })
+
+        Keyboard.addListener('keyboardDidHide',() => {
+            setKeyboardState(false);
+        })
+    })
 
     const style = useAnimatedStyle(() => {
         return {
@@ -103,8 +115,8 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
     }
 
     useDerivedValue(() => {
-        console.log(currentAccumulatedDistance.value)
-        if(currentAccumulatedDistance.value > Window.height/20 && currentOffset.value == 0){
+        //console.log(currentAccumulatedDistance.value)
+        if(currentAccumulatedDistance.value > Window.height/20 && currentOffset.value == 0 && !isKeyboardShown){
             runOnJS(onChange)();
         }
     })
@@ -112,6 +124,7 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
     useEffect(() => {
         if(visible){
             setModalVisible(true);
+            
             
             let opacity = 1;
             if(backOpacity?.valueOf() != null ||backOpacity?.valueOf() != undefined){
@@ -125,8 +138,12 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
         }
     },[visible])
 
+    useEffect(() => {
+        console.log(`modal visible? ${modalVisible}`)
+    },[modalVisible])
 
-   
+    const headerHeight = useHeaderHeight();
+    
 
     return <>
     <Modal visible={modalVisible} transparent={true}>   
@@ -150,7 +167,9 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
         }} ref={scrollviewRef} bounces={false} scrollEnabled={scrollable?.valueOf() == null || scrollable?.valueOf() == undefined? true : scrollable} contentContainerStyle={{flexGrow:1,zIndex:-1}} scrollEventThrottle={1.2} style={[scrollStyle]} showsVerticalScrollIndicator={false}>
             <View style={{height:paddingTop? paddingTop: Window.height/6,zIndex:-1}}></View>
             <Animated.View ref={viewRef} style={[style,{alignSelf:'center',justifyContent:'center',backgroundColor:'white'},contentContainerStyle]}>
+            
                 {children}
+                
             </Animated.View>
             <View style={{height:paddingBottom? paddingBottom : Window.height/3,zIndex:-1}}></View>
         </Animated.ScrollView>

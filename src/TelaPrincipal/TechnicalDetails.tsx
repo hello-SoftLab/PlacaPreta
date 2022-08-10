@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import Accordion from 'react-native-collapsible/Accordion';
 import Tubes from '../Components/tubes'
 import { PopupCard } from "../Components/PopupCard";
-import { ConsertosEAprimoramentos } from "./ConsertosEAprimoramentos";
+import { ConsertosEAprimoramentos } from "./TelaDeConsertosEAprimoramentos/ConsertosEAprimoramentos";
 import { CarSelectionPropertiesView } from "../TelaDeEscolhaDoCarro/CarSelectionPropertiesView";
 
 export function TechnicalDetails({navigation}) {
@@ -100,7 +100,9 @@ export function TechnicalDetails({navigation}) {
         <PopupCard paddingBottom={Window.height/20} contentContainerStyle={{borderRadius:15,backgroundColor:'#383838'}} backOpacity={0.3} width={Window.width/1.3} visible={consertos} onExit={() => {
             setConsertos(false);
         }}>
-            <ConsertosEAprimoramentos></ConsertosEAprimoramentos>
+            <ConsertosEAprimoramentos onFinish={() => {
+                setConsertos(false);
+            }}></ConsertosEAprimoramentos>
         </PopupCard>
         <CarSelectionPropertiesView modelName={selectedItemData.model} canSelect={false} visible={showInfo} onLeave={() => {
             setShowInfo(false);
