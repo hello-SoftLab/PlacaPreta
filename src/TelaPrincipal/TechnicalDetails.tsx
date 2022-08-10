@@ -31,10 +31,10 @@ export function TechnicalDetails({navigation}) {
             {selectedItemData.alias != null && selectedItemData.alias != "" && (() => <>
             <YearSizeText>{selectedItemData.year}</YearSizeText>
             <CarNameSizeText>{selectedItemData.alias}</CarNameSizeText>
-            <NormalSizeText style={{opacity:0.6,textAlign:'center'}}>{selectedItemData.model}</NormalSizeText></>)()}
+            <NormalSizeText style={{opacity:0.6,textAlign:'center'}}>{selectedItemData.Modelo}</NormalSizeText></>)()}
             {(selectedItemData.alias == null || selectedItemData.alias == "") && (() => {
                 return <><YearSizeText style={{padding:10}}>{selectedItemData.year}</YearSizeText>
-                <CarNameSizeText style={{textAlign:'center'}}>{selectedItemData.model}</CarNameSizeText>
+                <CarNameSizeText style={{textAlign:'center'}}>{selectedItemData.Modelo}</CarNameSizeText>
                 </>
             })()}
         </View>
@@ -107,7 +107,7 @@ export function TechnicalDetails({navigation}) {
                 setConsertos(false);
             }}></ConsertosEAprimoramentos>
         </PopupCard>
-        <CarSelectionPropertiesView modelName={selectedItemData.model} canSelect={false} visible={showInfo} onLeave={() => {
+        <CarSelectionPropertiesView modelName={selectedItemData.Modelo} canSelect={false} visible={showInfo} onLeave={() => {
             setShowInfo(false);
         }} ></CarSelectionPropertiesView>
         

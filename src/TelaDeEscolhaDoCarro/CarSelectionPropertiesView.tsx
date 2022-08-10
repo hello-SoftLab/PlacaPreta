@@ -51,20 +51,20 @@ export const CarSelectionPropertiesView = ({children,modelName,canSelect,visible
         
         useEffect(() => {
             db.readTransaction(tx => {
-                tx.executeSql("SELECT * FROM all_cars WHERE model=?",[modelName],(tx,result) => {
+                tx.executeSql("SELECT * FROM all_cars WHERE modelo=?",[modelName],(tx,result) => {
                     if(result.rows.length != 0){
                         const obj = result.rows._array[0];
                         setYear(obj['Ano'])
-                        setName(obj['model'])
-                        const {id,ano,model, ...rest} = obj;
+                        setName(obj['Modelo'])
+                        const {id,ano,modelo, ...rest} = obj;
                         const modelData = {};
                         for(const key of Object.keys(rest)){
                             if(rest[key] != null){
                                 modelData[key] = rest[key]
                             } 
-                        }    
+                        }
                         setModelInformation(modelData);
-                        console.log(`result model => ${result.rows._array[0].model}`)
+                        console.log(`result model => ${result.rows._array[0].Modelo}`)
                     }
                 },(tx,err) => {
                     console.log(err);

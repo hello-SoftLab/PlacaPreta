@@ -21,7 +21,7 @@ const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,mod
 
     const styleSelf = useAnimatedStyle(() => {
 
-        if(item.model == selected){
+        if(item.Modelo == selected){
             return {
                 backgroundColor:AppColors.yellow
             }
@@ -33,8 +33,8 @@ const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,mod
     });
 
     const onPress = () => {
-        if(item.model != selected){
-            setSelected(item.model);
+        if(item.Modelo != selected){
+            setSelected(item.Modelo);
             opacityRef.value = withTiming(1,{duration:500});
             positionRef.value = withTiming(Window.height/20,{duration:500});
         }
@@ -48,7 +48,7 @@ const CarPropertiesFunc = ({item,selected,opacityRef,positionRef,setSelected,mod
 
     return <Pressable style={{flex:1,width:'100%',backgroundColor:'yellow'}} disabled={modalVisibleVal} onPress={onPress}>
             <Animated.View style={[{borderWidth:1,padding:10},styleSelf]}>
-                <Text style={{marginLeft:10,fontFamily:AppConstants.fontInter}}>{item.model}</Text>
+                <Text style={{marginLeft:10,fontFamily:AppConstants.fontInter}}>{item.Modelo}</Text>
             </Animated.View>
         </Pressable>
     
@@ -81,7 +81,7 @@ export const CarCreation = ({navigation}) => {
     useEffect(() => {
         
         db.readTransaction(tx => {
-            tx.executeSql(`SELECT model FROM all_cars WHERE model LIKE '%${searchText}%' ORDER BY model `,[],(tx,result) =>{
+            tx.executeSql(`SELECT modelo FROM all_cars WHERE modelo LIKE '%${searchText}%' ORDER BY modelo `,[],(tx,result) =>{
                 setData(result.rows._array);
                 console.log(result.rows.length)
             },(tx,error) => {

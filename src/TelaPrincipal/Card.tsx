@@ -33,11 +33,11 @@ export default function Card({item,index,animationValue,viewCarProperties}) {
     //Card para adicionar carro
     if(item.id == -1){
         return <Animated.View style={[styles.cardContainer,style,{width:'100%',backgroundColor:'white',flex:1,justifyContent:'center',alignSelf:'center',alignItems:'center'}]}>
-                <TouchableWithoutFeedback style={{backgroundColor:'white',justifyContent:'center',alignItems:'center',width:Window.width/5,height:Window.height/10}} onPress={() => {
+                <Pressable style={{backgroundColor:'white',justifyContent:'center',alignItems:'center',width:Window.width/5,height:Window.height/10}} onPress={() => {
             navigation.navigate("CarCreation");
         }}>
             <Text style={[{fontSize:40}]}>+</Text>
-            </TouchableWithoutFeedback>
+            </Pressable>
         </Animated.View>
     }
 
@@ -57,10 +57,10 @@ export default function Card({item,index,animationValue,viewCarProperties}) {
             {item.alias != null && item.alias != "" && (() => <>
             <Text style={[styles.generalText,{fontSize:AppConstants.yearSize,marginTop:20,marginBottom:10}]}>{item.year}</Text>
             <Animated.Text style={[styles.generalText,{fontSize:AppConstants.cardAliasSize}]}>{item.alias}</Animated.Text>
-            <Text style={[styles.generalText,{fontSize:AppConstants.nameSize,opacity:0.6,textAlign:'center'}]}>{item.model}</Text></>)()}
+            <Text style={[styles.generalText,{fontSize:AppConstants.nameSize,opacity:0.6,textAlign:'center'}]}>{item.Modelo}</Text></>)()}
             {(item.alias == null || item.alias == "") && (() => {
                 return <><Text style={[styles.generalText,{fontSize:AppConstants.yearSize,marginTop:20,marginBottom:10}]}>{item.year}</Text>
-                <Text style={[styles.generalText,{fontSize:AppConstants.cardAliasSize,textAlign:'center'}]}>{item.model}</Text>
+                <Text style={[styles.generalText,{fontSize:AppConstants.cardAliasSize,textAlign:'center'}]}>{item.Modelo}</Text>
                 </>
             })()}
         </View>

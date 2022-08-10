@@ -54,14 +54,14 @@ export const DBFunctions = {
     insertNewCar: (presetName: string,carsDB: Database,db: Database,cb) => {
         const id = Math.floor(Math.random()*1000000);
         db.transaction(tx => {
-            tx.executeSql("SELECT id,model,Ano FROM all_cars WHERE model=?",[presetName],(tx,result) => {
+            tx.executeSql("SELECT id,modelo,Ano FROM all_cars WHERE modelo=?",[presetName],(tx,result) => {
                 carsDB.transaction(txTwo => {
                     const item = result.rows.item(0);
                     console.log(JSON.stringify(item))
                     txTwo.executeSql(`INSERT INTO cars (id,model,year) VALUES (?,?,?)`
                     ,[
                         id,
-                        item['model'],
+                        item['Modelo'],
                         item['Ano']
                     ],(txTwo,result) => {
                         cb();

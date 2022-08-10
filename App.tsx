@@ -22,7 +22,7 @@ import { MainScreen } from './src/MainScreen';
 export default function App() {
 
   return <AnimationsContext.Provider value={{detailsAnimationProgress:null,detailsAnimationGeneralOpacity:null,garageBottomCardPosition:null}}>
-  <DBContext.Provider value={{garageDB:InitDBContext(),allCarsDB:InitAllCarsDB()}}>
+  <DBContext.Provider value={{garageDB:null,allCarsDB:null}}>
   <GarageContext.Provider value={{selectedCarProperties:null,carousel:null,carsData:[],setCarsData:(arr) => {},shouldRenderStateFunc:(randomData) => {}}}>
   <AnimatedAppLoader image={require('./assets/images/logo.png')}>
     <MainScreen></MainScreen>

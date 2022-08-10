@@ -116,7 +116,7 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
 
     useDerivedValue(() => {
         //console.log(currentAccumulatedDistance.value)
-        if(currentAccumulatedDistance.value > Window.height/20 && currentOffset.value == 0 && !isKeyboardShown){
+        if(currentAccumulatedDistance.value > Window.height/100 && currentOffset.value == 0 && !isKeyboardShown){
             runOnJS(onChange)();
         }
     })
@@ -141,36 +141,29 @@ export const PopupCard = ({backGroundRender,contentContainerStyle,backOpacity,bg
     useEffect(() => {
     },[modalVisible])
 
-    const headerHeight = useHeaderHeight();
+
+    
     
 
-    return <>
+        return <>
     <Modal visible={modalVisible} transparent={true}>   
         <Animated.View style={[bgStyle,{position:'absolute',zIndex:-1}]}>
         </Animated.View>
-        <Animated.ScrollView onTouchStart={(event) => {
-            lastPosition.value = event.nativeEvent.pageY
-        }} onTouchMove={(event) => {
-            if(!event.isPropagationStopped()){
-                currentAccumulatedDistance.value = event.nativeEvent.pageY - lastPosition.value
-                lastPosition.value = event.nativeEvent.pageY
-                event.stopPropagation();
-            }
-        }} onTouchEnd={() => {
-            currentAccumulatedDistance.value = 0;
-        }} onScroll={(event) => {
+        <Animated.ScrollView onScroll={(event) => {
             currentOffset.value = event.nativeEvent.contentOffset.y;
             if(onScroll){
                 onScroll(event.nativeEvent);
             }
+        }} onScrollEndDrag={({nativeEvent}) => {
+            currentAccumulatedDistance.value = nativeEvent.velocity.y;
         }} ref={scrollviewRef} bounces={false} scrollEnabled={scrollable?.valueOf() == null || scrollable?.valueOf() == undefined? true : scrollable} contentContainerStyle={{flexGrow:1,zIndex:-1}} scrollEventThrottle={1.2} style={[scrollStyle]} showsVerticalScrollIndicator={false}>
-            <View style={{height:paddingTop? paddingTop: Window.height/6,zIndex:-1}}></View>
-            <Animated.View ref={viewRef} style={[style,{alignSelf:'center',justifyContent:'center',backgroundColor:'white'},contentContainerStyle]}>
-            
-                {children}
+                <View style={{height:paddingTop? paddingTop: Window.height/6,zIndex:-1}}></View>
+                <Animated.View ref={viewRef} style={[style,{alignSelf:'center',justifyContent:'center',backgroundColor:'white'},contentContainerStyle]}>
                 
-            </Animated.View>
-            <View style={{height:paddingBottom? paddingBottom : Window.height/3,zIndex:-1}}></View>
+                    {children}
+                    
+                </Animated.View>
+                <View style={{height:paddingBottom? paddingBottom : Window.height/3,zIndex:-1}}></View>
         </Animated.ScrollView>
         {backGroundRender}
     </Modal>
