@@ -87,7 +87,6 @@ export const TelaDeDescricao = ({visible,areaName,onLeave,onFinish,onDidExit}:Te
         <NormalSizeText style={{color:'white',fontSize:12,paddingTop:'2%'}}>*opcional</NormalSizeText>
         <Animated.View style={spacingStyleThree}></Animated.View>
         <RedRoundButton onPress={() => {
-
             if(onFinish){
                 onFinish(writtenText.value);
             }

@@ -66,7 +66,7 @@ export const TelaInicial = ({onFinish}: TelaInicialProps) => {
     }
 
     useEffect(() => {
-        setDescriptionScreenText('');
+        setShowDescScreen(false);
         if(selectedChoice == 0){
             resetToOriginal();
         }
